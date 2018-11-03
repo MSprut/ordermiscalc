@@ -2,7 +2,7 @@
 lock "~> 3.11.0"
 
 set :application, 'ordermiscalc'
-set :repo_url, 'git@github.org:MSprut/ordermiscalc.git'  # Edit this to match your repository
+set :repo_url, 'git@github.com:MSprut/ordermiscalc.git'  # Edit this to match your repository
 set :branch, :master
 set :deploy_to, '/home/evmart/www/ordermiscalc'
 set :user, 'evmart'
