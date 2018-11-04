@@ -9,6 +9,7 @@ require 'capistrano/rvm'
 require 'capistrano/rails/assets' # for asset handling add
 require 'capistrano/rails/migrations' # for running migrations
 require 'capistrano/puma'
+install_plugin Capistrano::Puma
 require 'capistrano/ssh_doctor'
 require 'capistrano/sidekiq'
 # Load the SCM plugin appropriate to your project:
