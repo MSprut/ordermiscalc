@@ -15,7 +15,7 @@ default: &default
   pool: 5
   username: <%= ENV['database_username'] %>
   password: <%= ENV['database_password_development'] %>
-  host: <%= ENV['database_host'] %>
+  host: <%= ENV['database_host_development'] %>
   port: <%= ENV['database_port'] %>
 
 development:
@@ -56,5 +56,5 @@ production:
   pool: 5
   username: <%= ENV['database_username'] %>
   password: <%= ENV['database_password_production'] %>
-  host: <%= ENV['database_host'] %>
+  host: <%= ENV['database_host_production'] %>
   port: <%= ENV['database_port'] %>
