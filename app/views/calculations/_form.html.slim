@@ -1,0 +1,9 @@
+= form_for @calculation do |f|
+  - if @calculation.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@calculation.errors.count, "error")} prohibited this calculation from being saved:"
+      ul
+        - @calculation.errors.full_messages.each do |message|
+          li = message
+
+  .actions = f.submit

@@ -1,0 +1,19 @@
+h1 Listing calculations
+
+table
+  thead
+    tr
+      th
+      th
+      th
+
+  tbody
+    - @calculations.each do |calculation|
+      tr
+        td = link_to 'Show', calculation
+        td = link_to 'Edit', edit_calculation_path(calculation)
+        td = link_to 'Destroy', calculation, data: { confirm: 'Are you sure?' }, method: :delete
+
+br
+
+= link_to 'New Calculation', new_calculation_path
