@@ -36,8 +36,7 @@ gem 'axlsx', '2.1.0.pre'
 gem 'axlsx_rails'
 
 gem 'best_in_place'
-gem 'bootstrap', '~> 4.1.3'
-#gem 'bootstrap-sass', '~> 3.3.6'
+gem 'bootstrap-sass', '~> 3.3.6'
 
 gem 'carrierwave', '~> 1.0'
 gem 'chartkick'
@@ -60,8 +59,6 @@ gem 'kaminari'
 
 gem 'mailtrap', '~> 0.2.1'
 gem 'mandrill-api'
-gem 'material_icons'
-gem 'materialize-sass'
 gem 'mini_magick'
 gem 'mysql2', '>= 0.3.18', '< 0.6.0'
 
