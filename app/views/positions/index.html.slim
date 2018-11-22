@@ -1,0 +1,23 @@
+h3.text-center.mt-5 Список должностей
+
+.row.mb-2.pl-3
+  = link_to 'Новая должность', new_position_path
+
+table.table.table-striped.table-light.table-hover.mb-4
+  thead.bg-secondary.text-white
+    tr
+      th.col Должность
+      th.col Оклад
+      th.col Действия
+
+  tbody
+    - @positions.each do |pos|
+      tr
+        td.col = pos.name
+        td.col = pos.position_salaries.last.try :salary
+        td.col
+          /= link_to 'Показать', pos
+          = link_to edit_position_path(pos) do
+            == material_icon.edit
+          = link_to pos, data: { confirm: 'Вы уверены?' }, method: :delete do
+            == material_icon.delete_outline.css_class('text-danger ml-2')
