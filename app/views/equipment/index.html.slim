@@ -1,0 +1,27 @@
+h3.text-center.mt-5 Список оборудования
+
+.row.mb-2.pl-3
+  = link_to 'Новое оборудование', new_equipment_path
+
+table.table.table-striped.table-light.table-hover.mb-4
+  thead.bg-secondary.text-white
+    tr
+      th Наименование
+      th Сумма приобретения, руб
+      th Срок службы, мес
+      th Мощность, Вт
+      th Действия
+
+  tbody
+    - @equipments.each do |eq|
+      tr
+        td = eq.name
+        td = eq.equipment_parameters.last.try :price
+        td = eq.equipment_parameters.last.try :lifetime
+        td = eq.equipment_parameters.last.try :power
+        td
+          /= link_to 'Показать', pos
+          = link_to edit_equipment_path(eq) do
+            == material_icon.edit
+          = link_to eq, data: { confirm: 'Вы уверены?' }, method: :delete do
+            == material_icon.delete_outline.css_class('text-danger ml-2')
