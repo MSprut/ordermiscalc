@@ -50,8 +50,8 @@ class EquipmentController < ApplicationController
 
   def destroy
     @equipment.update_column(:deleted, true)
-    EquipmentParameter.set_irrelevant(@equipment.id)
     respond_to do |format|
+      EquipmentParameter.set_irrelevant(@equipment.id)
       flash[:success] = 'Оборудование успешно удалено.'
       format.html { redirect_to equipment_index_path }
     end
