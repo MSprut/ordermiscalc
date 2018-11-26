@@ -1,0 +1,55 @@
+  = render 'layouts/errors', object: @equipment
+  
+  = form_for @equipment do |f|
+    .row
+      .form-group.col-sm-6.mt-5
+        = f.text_field :name, class: 'form-control form-control-lg', required: true
+        = f.label :name, 'Наименование', class: 'form-control-placeholder'
+      = f.fields_for :equipment_parameters, @equipment.equipment_parameters.build do |ep|
+        .form-group.col-sm-2.mt-5
+          = ep.text_field :price, class: 'form-control form-control-lg', required: true
+          = ep.label :price, 'Стоимость, руб', class: 'form-control-placeholder'
+        .form-group.col-sm-2.mt-5
+          = ep.text_field :lifetime, class: 'form-control form-control-lg', required: true
+          = ep.label :lifetime, 'Срок службы, мес', class: 'form-control-placeholder'
+        .form-group.col-sm-2.mt-5
+          = ep.text_field :power, class: 'form-control form-control-lg', required: true
+          = ep.label :power, 'Мощность, Вт', class: 'form-control-placeholder'
+    - if @equipment.persisted?
+      hr
+      .row.col-sm-12.col-xs-12.mb-2.text-muted
+        .col-sm-2.col-xs-2
+          | Стоимость, руб
+        .col-sm-2.col-xs-2
+          | Срок службы, мес
+        .col-sm-2.col-xs-2
+          | Мощность, Вт
+        .col-sm-2.col-xs-2
+          | Статус
+        .col-sm-2.col-xs-2
+          | Дата
+        .col-sm-2.col-xs-2
+          | Создана
+      hr.mb-1.mt-1
+      .row.col-sm-12.col-xs-12
+        - @equipment_parameters.each do |p|
+          .col-sm-2.col-xs-2
+            = p.price
+          .col-sm-2.col-xs-2
+            = p.lifetime
+          .col-sm-2.col-xs-2
+            = p.power
+          .col-sm-2.col-xs-2
+            - if p.actual
+              span.badge.bg-success.text-white
+                | Активный
+            - else
+              span.badge.bg-warning.text-white
+                | Неактивный
+          .col-sm-2.col-xs-2
+            = p.created_at.strftime('%d-%m-%Y / %H:%M')
+          .col-sm-2.col-xs-2
+            | Имя пользователя
+    hr
+    .row.justify-content-center.mt-3.mb-3
+      = f.submit 'Сохранить', class: "btn btn-primary btn-lg"
