@@ -1,0 +1,73 @@
+  = render 'layouts/errors', object: @accountant_preference
+  
+  = form_for @accountant_preference do |f|
+    .row.pt-5
+      .form-group.col-sm-2
+        = f.text_field :income_tax_percent, class: 'form-control form-control-lg', required: true
+        = f.label :income_tax_percent, 'НДФЛ, %', class: 'form-control-placeholder'
+      .form-group.col-sm-2
+        = f.text_field :eru_tax_percent, class: 'form-control form-control-lg', required: true
+        = f.label :eru_tax_percent, 'ЕСВ, %', class: 'form-control-placeholder'
+      .form-group.col-sm-2
+        = f.text_field :manager_percent, class: 'form-control form-control-lg', required: true
+        = f.label :manager_percent, 'Расходы на сбыт, %', class: 'form-control-placeholder'
+      .form-group.col-sm-2
+        = f.text_field :profit_percent, class: 'form-control form-control-lg', required: true
+        = f.label :profit_percent, 'Прибыль, %', class: 'form-control-placeholder'
+      .form-group.col-sm-2
+        = f.text_field :overheads_percent, class: 'form-control form-control-lg', required: true
+        = f.label :overheads_percent, 'Расходы накладные, %', class: 'form-control-placeholder'
+      .form-group.col-sm-2
+        = f.text_field :tax_percent, class: 'form-control form-control-lg', required: true
+        = f.label :tax_percent, 'Налог, %', class: 'form-control-placeholder'
+
+    - if @accountant_preference.persisted?
+      hr
+      .row.col-sm-12.col-xs-12.mb-2.text-muted.text-nowrap.small
+        .col-sm-1.col-xs-1
+          | НДФЛ, %
+        .col-sm-1.col-xs-1
+          | ЕСВ, %
+        .col-sm-1.col-xs-1
+          | Cбыт, %
+        .col-sm-1.col-xs-1
+          | Прибыль, %
+        .col-sm-2.col-xs-2
+          | Накладные, %
+        .col-sm-1.col-xs-1
+          | Налог, %
+        .col-sm-1.col-xs-1
+          | Статус
+        .col-sm-2.col-xs-2
+          | Дата
+        .col-sm-2.col-xs-2
+          | Создано
+      hr.mb-1.mt-1
+      .row.col-sm-12.col-xs-12
+        - @accountant_preferences.each do |ap|
+          .col-sm-1.col-xs-1
+            = ap.income_tax_percent
+          .col-sm-1.col-xs-1
+            = ap.eru_tax_percent
+          .col-sm-1.col-xs-1
+            = ap.manager_percent
+          .col-sm-1.col-xs-1
+            = ap.profit_percent
+          .col-sm-2.col-xs-2
+            = ap.overheads_percent
+          .col-sm-1.col-xs-1
+            = ap.tax_percent
+          .col-sm-1.col-xs-1
+            - if ap.actual
+              span.badge.bg-success.text-white
+                | Активный
+            - else
+              span.badge.bg-warning.text-white
+                | Неактивный
+          .col-sm-2.col-xs-2
+            = ap.created_at.strftime('%d-%m-%Y / %H:%M')
+          .col-sm-2.col-xs-2
+            | Имя пользователя
+    hr
+    .row.justify-content-center.mt-3.mb-3
+      = f.submit 'Сохранить', class: "btn btn-primary btn-lg"

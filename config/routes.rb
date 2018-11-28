@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :accountant_preferences
   resources :equipment
   resources :positions
   get 'static_pages/home'
