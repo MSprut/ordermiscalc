@@ -1,0 +1,31 @@
+h3.text-center.mt-5 Список настроек
+
+.row.mb-2.pl-3
+  = link_to 'Новые настройки', new_accountant_preference_path
+
+table.table.table-striped.table-light.table-hover.mb-4
+  thead.bg-secondary.text-white.small
+    tr
+      th НДФЛ, %
+      th ЕСВ, %
+      th Расходы на сбыт, %
+      th Прибыль, %
+      th Расходы накладные, %
+      th Налог, %
+      th Действия
+
+  tbody
+    - @accountant_preferences.each do |ap|
+      tr
+        td = ap.try :income_tax_percent
+        td = ap.try :eru_tax_percent
+        td = ap.try :manager_percent
+        td = ap.try :profit_percent
+        td = ap.try :overheads_percent
+        td = ap.try :tax_percent
+        td
+          /= link_to 'Показать', pos
+          = link_to edit_accountant_preference_path(ap) do
+            == material_icon.edit
+          = link_to ap, data: { confirm: 'Вы уверены?' }, method: :delete do
+            == material_icon.delete_outline.css_class('text-danger ml-2')

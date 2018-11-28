@@ -10,7 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_26_124215) do
+ActiveRecord::Schema.define(version: 2018_11_28_120343) do
+
+  create_table "accountant_preferences", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.decimal "income_tax_percent", precision: 5, scale: 2, default: "0.0", null: false
+    t.decimal "eru_tax_percent", precision: 5, scale: 2, default: "0.0", null: false
+    t.decimal "manager_percent", precision: 5, scale: 2, default: "0.0", null: false
+    t.decimal "profit_percent", precision: 5, scale: 2, default: "0.0", null: false
+    t.decimal "overheads_percent", precision: 5, scale: 2, default: "0.0", null: false
+    t.decimal "tax_percent", precision: 5, scale: 2, default: "0.0", null: false
+    t.boolean "actual", default: true, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "calculations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.datetime "created_at", null: false
