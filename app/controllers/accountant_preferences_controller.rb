@@ -10,11 +10,12 @@ class AccountantPreferencesController < ApplicationController
 
   def new
     @accountant_preference = AccountantPreference.new
+    @accountant_preferences = AccountantPreference.get_last(5)
   end
 
   def edit
     @accountant_preference = AccountantPreference.find(params[:id])
-    @accountant_preferences = AccountantPreference.get_last(@accountant_preference.id, 5)
+    @accountant_preferences = AccountantPreference.get_last(5)
   end
 
   def create
@@ -22,7 +23,7 @@ class AccountantPreferencesController < ApplicationController
 
     respond_to do |format|
       if @accountant_preference.save
-        AccountantPreference.set_irrelevant(@accountant_preference.id)
+        set_previous_irrelevant(@accountant_preference.id)
         #@accountant_preference.set_relevant
         flash[:success] = 'Настройки успешно созданы.'
         format.html { redirect_to edit_accountant_preference_path(@accountant_preference) }
@@ -34,10 +35,11 @@ class AccountantPreferencesController < ApplicationController
   end
 
   def update
+    @accountant_preference = AccountantPreference.new(accountant_preference_params)
     respond_to do |format|
       if @accountant_preference.update(accountant_preference_params)
-        AccountantPreference.set_irrelevant(@accountant_preference.id)
-        @accountant_preference.set_relevant
+        @accountant_preference.set_previous_irrelevant#(@accountant_preference.id)
+        #@accountant_preference.set_relevant
         flash[:success] = 'Настройки успешно отредактирована.'
         format.html { redirect_to edit_accountant_preference_path(@accountant_preference) }
       else

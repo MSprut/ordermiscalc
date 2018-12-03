@@ -43,8 +43,8 @@
         .col-sm-2.col-xs-2
           | Создано
       hr.mb-1.mt-1
-      .row.col-sm-12.col-xs-12
-        - @accountant_preferences.each do |ap|
+      - @accountant_preferences.each do |ap|
+        .row.col-sm-12.col-xs-12.item-hystory-row
           .col-sm-1.col-xs-1
             = ap.income_tax_percent
           .col-sm-1.col-xs-1

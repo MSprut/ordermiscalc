@@ -31,8 +31,8 @@
         .col-sm-2.col-xs-2
           | Создана
       hr.mb-1.mt-1
-      .row.col-sm-12.col-xs-12
-        - @equipment_parameters.each do |p|
+      - @equipment_parameters.each do |p|
+        .row.col-sm-12.col-xs-12.item-hystory-row
           .col-sm-2.col-xs-2
             = p.price
           .col-sm-2.col-xs-2

@@ -3,19 +3,21 @@ class PositionsController < ApplicationController
 
   def index
     @positions = Position.where(deleted: false).order(name: :asc)
+    @accountant_preferences = AccountantPreference.all || AccountantPreference.new
   end
 
-  def show
-  end
+  def show; end
 
   def new
     @position = Position.new
     @position.position_salaries.build
+    @accountant_preference = AccountantPreference.where(actual: true)
   end
 
   def edit
     @position = Position.find(params[:id])
     @position_salaries = PositionSalary.get_last(@position.id, 5)
+    @accountant_preference = AccountantPreference.where(id: @position_salaries.last.accountant_preference_id).or(AccountantPreference.where(actual: true))
   end
 
   def create
@@ -65,6 +67,7 @@ class PositionsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def position_params
-      params.require(:position).permit(:name, position_salaries_attributes: [:id, :position_id, :salary, :actual])
+      params.require(:position).permit(:name,
+        position_salaries_attributes: [:id, :position_id, :salary, :actual, :accountant_preference_id])
     end
 end
