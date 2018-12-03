@@ -23,7 +23,7 @@ class AccountantPreferencesController < ApplicationController
 
     respond_to do |format|
       if @accountant_preference.save
-        set_previous_irrelevant(@accountant_preference.id)
+        @accountant_preference.set_previous_irrelevant#(@accountant_preference.id)
         #@accountant_preference.set_relevant
         flash[:success] = 'Настройки успешно созданы.'
         format.html { redirect_to edit_accountant_preference_path(@accountant_preference) }
