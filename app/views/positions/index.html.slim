@@ -5,17 +5,26 @@ h3.text-center.mt-5 Список должностей
 
 table.table.table-striped.table-light.table-hover.mb-4
   thead.bg-secondary.text-white.small
-    tr.d-flex
-      th.col-6 Должность
-      th.col-4 Оклад, руб
-      th.col-2 Действия
+    tr
+      th Должность
+      th На руки, руб
+      th Оклад с НДФЛ, руб
+      th Оклад с ЕСВ, руб
+      th ИТОГО, руб
+      th Ставка, руб
+      th Действия
 
   tbody
     - @positions.each do |pos|
-      tr.d-flex
-        td.col-6 = pos.name
-        td.col-4 = pos.position_salaries.last.try :salary
-        td.col-2
+      - details = salary_details(pos.actual_salary, pos.actual_pref)
+      tr
+        td = pos.name
+        td = pos.position_salaries.last.try :salary
+        td = details.income
+        td = details.eru
+        td = details.total
+        td = details.rate
+        td
           /= link_to 'Показать', pos
           = link_to edit_position_path(pos) do
             == material_icon.edit

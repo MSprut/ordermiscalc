@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_28_120343) do
+ActiveRecord::Schema.define(version: 2018_12_01_091433) do
 
   create_table "accountant_preferences", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.decimal "income_tax_percent", precision: 5, scale: 2, default: "0.0", null: false
@@ -53,6 +53,8 @@ ActiveRecord::Schema.define(version: 2018_11_28_120343) do
     t.boolean "actual", default: true, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "accountant_preference_id"
+    t.index ["accountant_preference_id"], name: "index_position_salaries_on_accountant_preference_id"
     t.index ["position_id"], name: "index_position_salaries_on_position_id"
   end
 
@@ -63,4 +65,5 @@ ActiveRecord::Schema.define(version: 2018_11_28_120343) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  add_foreign_key "position_salaries", "accountant_preferences"
 end

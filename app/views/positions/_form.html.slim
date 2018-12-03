@@ -9,34 +9,50 @@
         .form-group.col-sm-6.mt-5
           = ps.text_field :salary, class: 'form-control form-control-lg', required: true
           = ps.label :salary, 'Оклад, руб', class: 'form-control-placeholder'
+          = ps.hidden_field :accountant_preference_id, value: @accountant_preference.first.id
     - if @position.persisted?
       hr
-      .row.mb-2.text-muted.small
-        .col-sm-4.col-xs-12
-        .col-sm-2.col-xs-2
-          | Оклад, руб
-        .col-sm-2.col-xs-2
+      .row.mb-2.text-muted.small.text-nowrap
+        .col-2
+          | На руки, руб
+        .col-2
+          | с НДФЛ, руб
+        .col-1
+          | c ЕСВ, руб
+        .col-1
+          | ИТОГО, руб
+        .col-1
+          | Ставка, руб
+        .col-1
           | Статус
-        .col-sm-2.col-xs-2
+        .col-2
           | Дата
-        .col-sm-2.col-xs-2
+        .col-2
           | Создан
       hr.mb-1.mt-1
-      .row
-        - @position_salaries.each do |p|
-          .col-sm-4.col-xs-12
-          .col-sm-2.col-xs-2
-            = p.salary
-          .col-sm-2.col-xs-2
-            - if p.actual
+      - @position_salaries.each do |ps|
+        - details = salary_details(ps, @accountant_preference.first)
+        .row.item-hystory-row.text-nowrap
+          .col-2
+            = ps.salary
+          .col-2
+            = details.income
+          .col-1
+            = details.eru
+          .col-1
+            = details.total
+          .col-1
+            = details.rate
+          .col-1
+            - if ps.actual
               span.badge.bg-success.text-white
                 | Активный
             - else
               span.badge.bg-warning.text-white
                 | Неактивный
-          .col-sm-2.col-xs-2
-            = p.created_at.strftime('%d-%m-%Y / %H:%M')
-          .col-sm-2.col-xs-2
+          .col-2
+            = ps.created_at.strftime('%d-%m-%Y / %H:%M')
+          .col-2
             | Имя пользователя
     hr
     .row.justify-content-center.mt-3.mb-3
