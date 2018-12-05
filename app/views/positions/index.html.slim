@@ -9,7 +9,6 @@ table.table.table-striped.table-light.table-hover.mb-4
       th Должность
       th На руки, руб
       th Оклад с НДФЛ, руб
-      th Оклад с ЕСВ, руб
       th ИТОГО, руб
       th Ставка, руб/ч
       th Действия
@@ -21,7 +20,6 @@ table.table.table-striped.table-light.table-hover.mb-4
         td = pos.name
         td = pos.position_salaries.last.try :salary
         td = details.income
-        td = details.eru
         td = details.total
         td = details.rate
         td
