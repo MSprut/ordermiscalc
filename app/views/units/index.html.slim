@@ -1,0 +1,21 @@
+h3.text-center.mt-5 Список единиц измерения
+
+.row.mb-2.pl-3
+  = link_to 'Новая единица имерения', new_unit_path
+
+table.table.table-striped.table-light.table-hover.mb-4
+  thead.bg-secondary.text-white.small
+    tr
+      th Наименование
+      th Действия
+
+  tbody
+    - @units.each do |u|
+      tr
+        td = u.name
+        td
+          /= link_to 'Показать', pos
+          = link_to edit_unit_path(u) do
+            == material_icon.edit
+          = link_to u, data: { confirm: 'Вы уверены?' }, method: :delete do
+            == material_icon.delete_outline.css_class('text-danger ml-2')

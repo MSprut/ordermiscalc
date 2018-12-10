@@ -1,0 +1,55 @@
+  = render 'layouts/errors', object: @inventory
+  
+  = form_for @inventory do |f|
+    .row.mt-5
+      .form-group.col-sm-6
+        = f.label :unit_id, 'Категория', class: 'control-label small-label-placeholder'
+        = f.select :unit_id, @units, { include_blank: '' }, class: 'form-control form-control-lg', required: true
+    .row.mt-5
+      .form-group.col-sm-6
+        = f.text_field :name, class: 'form-control form-control-lg', required: true
+        = f.label :name, 'Наименование', class: 'form-control-placeholder'
+      .form-group.col-sm-2
+        = f.label :unit_id, 'Ед. измерения', class: 'small-label-placeholder'
+        = f.select :unit_id, @units, { include_blank: '' }, { class: 'form-control form-control-lg', required: true }
+      = f.fields_for :inventory_parameters, @inventory.inventory_parameters.build do |ip|
+        .form-group.col-sm-2
+          = ip.text_field :price, class: 'form-control form-control-lg', required: true
+          = ip.label :price, 'Стоимость, руб', class: 'form-control-placeholder'
+        .form-group.col-sm-2
+          = ip.text_field :margin, class: 'form-control form-control-lg', required: true
+          = ip.label :margin, 'Наценка, %', class: 'form-control-placeholder'
+    - if @inventory.persisted?
+      hr
+      .row.col-sm-12.col-xs-12.mb-2.text-muted.small
+        .col-sm-2.col-xs-2
+          | Стоимость, руб
+        .col-sm-2.col-xs-2
+          | Наценка, %
+        .col-sm-2.col-xs-2
+          | Статус
+        .col-sm-2.col-xs-2
+          | Дата
+        .col-sm-2.col-xs-2
+          | Создана
+      hr.mb-1.mt-1
+      - @inventory_parameters.each do |ip|
+        .row.col-sm-12.col-xs-12.item-hystory-row
+          .col-sm-2.col-xs-2
+            = ip.price
+          .col-sm-2.col-xs-2
+            = ip.margin
+          .col-sm-2.col-xs-2
+            - if ip.actual
+              span.badge.bg-success.text-white
+                | Активный
+            - else
+              span.badge.bg-warning.text-white
+                | Неактивный
+          .col-sm-2.col-xs-2
+            = ip.created_at.strftime('%d-%m-%Y / %H:%M')
+          .col-sm-2.col-xs-2
+            | Имя пользователя
+    hr
+    .row.justify-content-center.mt-3.mb-3
+      = f.submit 'Сохранить', class: "btn btn-primary btn-lg"
