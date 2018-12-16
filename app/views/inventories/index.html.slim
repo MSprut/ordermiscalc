@@ -1,0 +1,27 @@
+h3.text-center.mt-5 Список ТМЦ
+
+.row.mb-2.pl-3
+  = link_to 'Новая ТМЦ', new_inventory_path
+
+table.table.table-striped.table-light.table-hover.mb-4
+  thead.bg-secondary.text-white.small
+    tr
+      th Наименование
+      th Ед. измерения
+      th Стоимость, руб
+      th Наценка, %
+      th Действия
+
+  tbody
+    - @inventories.each do |inv|
+      tr
+        td = inv.name
+        th = inv.unit.name
+        td = inv.inventory_parameters.last.try :price
+        td = inv.inventory_parameters.last.try :margin
+        td
+          /= link_to 'Показать', pos
+          = link_to edit_inventory_path(inv) do
+            == material_icon.edit
+          = link_to inv, data: { confirm: 'Вы уверены?' }, method: :delete do
+            == material_icon.delete_outline.css_class('text-danger ml-2')

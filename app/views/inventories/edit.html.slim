@@ -1,0 +1,9 @@
+h3.text-center.mt-5 Редактирование ТМЦ
+
+.row.mb-2.pl-3
+  = link_to 'Новая ТМЦ', new_inventory_path
+
+= render 'form'
+
+.row.mb-5.pl-3
+  = link_to 'Список ТМЦ', inventories_path

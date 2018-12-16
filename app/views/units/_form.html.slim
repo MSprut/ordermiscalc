@@ -1,0 +1,9 @@
+  = render 'layouts/errors', object: @unit
+  
+  = form_for @unit do |f|
+    .row
+      .form-group.col-sm-12.mt-5
+        = f.text_field :name, class: 'form-control form-control-lg', required: true
+        = f.label :name, 'Наименование', class: 'form-control-placeholder'
+    .row.justify-content-center.mt-3.mb-3
+      = f.submit 'Сохранить', class: "btn btn-primary btn-lg"
