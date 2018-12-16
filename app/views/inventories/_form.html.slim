@@ -4,7 +4,7 @@
     .row.mt-5
       .form-group.col-sm-6
         = f.label :unit_id, 'Категория', class: 'control-label small-label-placeholder'
-        = f.select :unit_id, @units, { include_blank: '' }, class: 'form-control form-control-lg', required: true
+        = f.select :unit_id, @inventory_categories, { include_blank: '...' }, class: 'form-control form-control-lg', required: true
     .row.mt-5
       .form-group.col-sm-6
         = f.text_field :name, class: 'form-control form-control-lg', required: true

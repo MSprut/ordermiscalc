@@ -4,5 +4,8 @@ class Inventory < ApplicationRecord
 
   belongs_to :unit
 
+  has_many :inventory_categories_inventories, :dependent => :destroy
+  has_many :inventory_categories, through: :inventory_categories_inventories
+
   validates :name, presence: true
 end

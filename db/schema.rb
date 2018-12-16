@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_07_094240) do
+ActiveRecord::Schema.define(version: 2018_12_10_094024) do
 
   create_table "accountant_preferences", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.decimal "income_tax_percent", precision: 5, scale: 2, default: "0.0", null: false
@@ -56,6 +56,24 @@ ActiveRecord::Schema.define(version: 2018_12_07_094240) do
     t.index ["unit_id"], name: "index_inventories_on_unit_id"
   end
 
+  create_table "inventory_categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name", default: "", null: false
+    t.boolean "deleted", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "ancestry"
+    t.index ["ancestry"], name: "index_inventory_categories_on_ancestry"
+  end
+
+  create_table "inventory_categories_inventories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "inventory_category_id"
+    t.bigint "inventory_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["inventory_category_id"], name: "index_inventory_categories_inventories_on_inventory_category_id"
+    t.index ["inventory_id"], name: "index_inventory_categories_inventories_on_inventory_id"
+  end
+
   create_table "inventory_parameters", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "inventory_id"
     t.decimal "price", precision: 10, scale: 2, default: "0.0", null: false
@@ -91,5 +109,7 @@ ActiveRecord::Schema.define(version: 2018_12_07_094240) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  add_foreign_key "inventory_categories_inventories", "inventories"
+  add_foreign_key "inventory_categories_inventories", "inventory_categories"
   add_foreign_key "position_salaries", "accountant_preferences"
 end

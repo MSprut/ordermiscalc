@@ -1,0 +1,20 @@
+
+nav.navbar.navbar-expand-lg.navbar-light.bg-light.navbar-custom
+  = link_to '/', class: 'navbar-brand' do
+    = image_tag("logo_long.png", :heigth => 30, :width => 200)
+  .collapse.navbar-collapse#navbarNav
+    ul.navbar-nav.ml-2
+      li.nav-item
+        = link_to "Главная", "/", class: 'nav-link'
+      li.nav-item
+        = link_to "Настройки финансовые", accountant_preferences_path, class: 'nav-link'
+      li.nav-item
+        = link_to "Должности", positions_path, class: 'nav-link'
+      li.nav-item
+        = link_to "Оборудование", equipment_index_path, class: 'nav-link'
+      li.nav-item
+        = link_to "Единицы измерения", units_path, class: 'nav-link'
+      li.nav-item
+        = link_to "Категории ТМЦ", inventory_categories_path, class: 'nav-link'
+      li.nav-item
+        = link_to "ТМЦ", inventories_path, class: 'nav-link'

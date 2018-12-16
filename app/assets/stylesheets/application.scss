@@ -10,7 +10,7 @@
  * files in this directory. Styles in this file should be added after the last require_* statement.
  * It is generally better to create a new file per style scope.
  *
- * require font-awesome
+ *= require font-awesome
  *= require material_icons
  * require_tree .
  * require_self
@@ -20,7 +20,9 @@
 @import "bootstrap";
 
 @import "accountant_preferences";
+@import "inventory_categories";
 //@import "materialize";
+
 .small-label {
   font-size: 80%;
   padding: 12px 0 0 16px;
@@ -37,102 +39,33 @@
   transform: translate3d(0, -100%, 0);
 }
 
-  select.form-control {
-    padding-right: 25px;
-    background-image: url("data:image/svg+xml,\
-      <svg version='1.1' xmlns='http://www.w3.org/2000/svg' width='14px'\
-           height='14px' viewBox='0 0 1200 1000' fill='rgb(51,51,51)'>\
-        <path d='M1100 411l-198 -199l-353 353l-353 -353l-197 199l551 551z'/>\
-      </svg>");
-    background-repeat: no-repeat;
-    background-position: calc(100% - 7px) 50%;
-    -moz-appearance: none;
-    appearance: none;
-  }
+select.form-control {
+  padding-right: 25px;
+  background-image: url("data:image/svg+xml,\
+    <svg version='1.1' xmlns='http://www.w3.org/2000/svg' width='14px'\
+         height='14px' viewBox='0 0 1200 1000' fill='rgb(51,51,51)'>\
+      <path d='M1100 411l-198 -199l-353 353l-353 -353l-197 199l551 551z'/>\
+    </svg>");
+  background-repeat: no-repeat;
+  background-position: calc(100% - 7px) 50%;
+  -moz-appearance: none;
+  appearance: none;
+}
 
 select, select:-moz-focusring, select::-moz-focus-inner {
-       color: transparent !important;
-       text-shadow: 0 0 0 #000 !important;
-       /*background-image: none !important;*/
-       border:0;
-       cursor: pointer;
-    }
+  color: transparent !important;
+  text-shadow: 0 0 0 #000 !important;
+  border:0;
+  cursor: pointer;
+}
 
 select.form-control option {
   background-color: #fff !important;
   color: #000;
 }
-/*select:-moz-focusring {
-    color: transparent;
-    text-shadow: 0 0 0 #000;
-}*/
 
-
-/*select.form-control::-ms-expand {
-            width:12px;
-            border:none;
-            background:#fff;
-        }*/
-/*
-.m-t-5 {
-  margin-top: 5px !important;
-}
-
-.m-t-10 {
-  margin-top: 10px !important;
-}
-
-.m-t-15 {
-  margin-top: 15px !important;
-}
-
-.m-t-20 {
-  margin-top: 20px !important;
-}
-
-.m-t-25 {
-  margin-top: 25px !important;
-}
-
-.m-t-30 {
-  margin-top: 30px !important;
-}
-
-.m-t-35 {
-  margin-top: 35px !important;
-}
-
-.m-b-5 {
-  margin-bottom: 5px !important;
-}
-
-.m-b-10 {
-  margin-bottom: 10px !important;
-}
-
-.m-b-15 {
-  margin-bottom: 15px !important;
-}
-
-.m-b-20 {
-  margin-bottom: 20px !important;
-}
-
-.m-b-25 {
-  margin-bottom: 25px !important;
-}
-
-.m-b-30 {
-  margin-bottom: 30px !important;
-}
-
-.m-b-35 {
-  margin-bottom: 35px !important;
-}
-*/
 .form-group {
   position: relative;
-  /*margin-bottom: 1.5rem;*/
 }
 
 .form-control-placeholder {
@@ -147,5 +80,22 @@ select.form-control option {
 .form-control:valid + .form-control-placeholder {
   font-size: 80%;
   transform: translate3d(0, -100%, 0);
-  /*opacity: 1;*/
+}
+
+.navbar-custom {
+    background-color: #ff5500;
+}
+/* change the brand and text color */
+.navbar-custom .navbar-brand,
+.navbar-custom .navbar-text {
+    color: #ccc;
+}
+/* change the link color */
+.navbar-custom .navbar-nav .nav-link {
+    color: #ccc;
+}
+/* change the color of active or hovered links */
+.navbar-custom .nav-item.active .nav-link,
+.navbar-custom .nav-item:hover .nav-link {
+    color: #1078c5;
 }

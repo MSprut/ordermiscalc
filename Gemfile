@@ -32,6 +32,7 @@ end
 
 gem 'rails', '5.2.0'
 
+gem 'ancestry'
 gem 'axlsx', '2.1.0.pre'
 gem 'axlsx_rails'
 

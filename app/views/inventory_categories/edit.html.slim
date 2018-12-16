@@ -1,0 +1,9 @@
+h3.text-center.mt-5 Редактирование категории ТМЦ
+
+.row.mb-2.pl-3
+  = link_to 'Новая категория ТМЦ', new_inventory_category_path
+
+= render 'form'
+
+.row.mb-5.pl-3
+  = link_to 'Список категорий ТМЦ', inventory_categories_path

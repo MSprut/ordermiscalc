@@ -1,0 +1,25 @@
+h3.text-center.mt-5 Список категорий
+
+.row.mb-2.pl-3
+  = link_to 'Новая категория ТМЦ', new_inventory_category_path
+
+.row.mt-5.mb-5.pl-5
+  .tree.well
+    = nested_groups(@inventory_categories)
+/table.table.table-striped.table-light.table-hover.mb-4
+  thead.bg-secondary.text-white.small
+    tr
+      th Наименование
+      th Действия
+
+  tbody
+    - @inventory_categories.each do |ic|
+      tr
+        /td = ic.name
+        td = nested_groups(@inventory_categories)
+        td
+          /= link_to 'Показать', pos
+          = link_to edit_inventory_category_path(ic) do
+            == material_icon.edit
+          = link_to ic, data: { confirm: 'Вы уверены?' }, method: :delete do
+            == material_icon.delete_outline.css_class('text-danger ml-2')

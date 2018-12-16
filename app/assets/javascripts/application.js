@@ -20,3 +20,18 @@
 // require materialize-sprockets
 // require rails-ujs
 //= require_tree .
+
+$(function () {
+    $('.tree li:has(ul)').addClass('parent_li').find(' > span').attr('title', 'Свернуть ветку');
+    $('.tree li.parent_li > span').on('click', function (e) {
+        var children = $(this).parent('li.parent_li').find(' > ul > li');
+        if (children.is(":visible")) {
+            children.hide('fast');
+            $(this).attr('title', 'Развернуть ветку').find(' > i').addClass('fa-plus-square-o').removeClass('fa-minus-square-o');
+        } else {
+            children.show('fast');
+            $(this).attr('title', 'Свернуть ветку').find(' > i').addClass('fa-minus-square-o').removeClass('fa-plus-square-o');
+        }
+        e.stopPropagation();
+    });
+});
