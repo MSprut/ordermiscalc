@@ -21,7 +21,10 @@
 // require rails-ujs
 //= require_tree .
 
-$(function () {
+
+// require inventory_categories
+
+/*$(function () {
     $('.tree li:has(ul)').addClass('parent_li').find(' > span').attr('title', 'Свернуть ветку');
     $('.tree li.parent_li > span').on('click', function (e) {
         var children = $(this).parent('li.parent_li').find(' > ul > li');
@@ -34,4 +37,4 @@ $(function () {
         }
         e.stopPropagation();
     });
-});
+});*/

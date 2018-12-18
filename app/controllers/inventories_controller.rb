@@ -67,7 +67,7 @@ class InventoriesController < ApplicationController
     end
 
     def inventory_params
-      params.require(:inventory).permit(:name, :unit_id, inventory_parameters_attributes: [:id, :inventory_id, :price, :margin, :actual], inventory_category_ids: [])
+      params.require(:inventory).permit(:name, :unit_id, :inventory_category_ids, inventory_parameters_attributes: [:id, :inventory_id, :price, :margin, :actual])
     end
 
     def collection_for_parent_select
