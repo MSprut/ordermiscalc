@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_10_094024) do
+ActiveRecord::Schema.define(version: 2019_01_15_080010) do
 
   create_table "accountant_preferences", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.decimal "income_tax_percent", precision: 5, scale: 2, default: "0.0", null: false
@@ -44,6 +44,8 @@ ActiveRecord::Schema.define(version: 2018_12_10_094024) do
     t.boolean "actual", default: true, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.decimal "residual_price", precision: 10, scale: 2, default: "0.0", null: false
+    t.integer "standbay_power", default: 0, null: false
     t.index ["equipment_id"], name: "index_equipment_parameters_on_equipment_id"
   end
 

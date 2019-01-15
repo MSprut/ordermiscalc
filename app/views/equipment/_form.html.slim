@@ -1,20 +1,27 @@
   = render 'layouts/errors', object: @equipment
   
   = form_for @equipment do |f|
-    .row
-      .form-group.col-sm-6.mt-5
+    .row.mt-5
+      .form-group.col-sm-6
         = f.text_field :name, class: 'form-control form-control-lg', required: true
         = f.label :name, 'Наименование', class: 'form-control-placeholder'
+    .row.mt-5
       = f.fields_for :equipment_parameters, @equipment.equipment_parameters.build do |ep|
-        .form-group.col-sm-2.mt-5
+        .form-group.col-sm-2
           = ep.text_field :price, class: 'form-control form-control-lg', required: true
-          = ep.label :price, 'Стоимость, руб', class: 'form-control-placeholder'
-        .form-group.col-sm-2.mt-5
+          = ep.label :price, 'Первонач. ст-ть, руб', class: 'form-control-placeholder'
+        .form-group.col-sm-2
+          = ep.text_field :residual_price, class: 'form-control form-control-lg', required: true
+          = ep.label :residual_price, 'Остаточ. ст-ть, руб', class: 'form-control-placeholder'
+        .form-group.col-sm-2
           = ep.text_field :lifetime, class: 'form-control form-control-lg', required: true
           = ep.label :lifetime, 'Срок службы, мес', class: 'form-control-placeholder'
-        .form-group.col-sm-2.mt-5
+        .form-group.col-sm-2
           = ep.text_field :power, class: 'form-control form-control-lg', required: true
           = ep.label :power, 'Мощность, Вт', class: 'form-control-placeholder'
+        .form-group.col-sm-2
+          = ep.text_field :standbay_power, class: 'form-control form-control-lg', required: true
+          = ep.label :standbay_power, 'Мощн-ть ожидания, Вт', class: 'form-control-placeholder'
     - if @equipment.persisted?
       hr
       .row.col-sm-12.col-xs-12.mb-2.text-muted.small
@@ -35,10 +42,14 @@
         .row.col-sm-12.col-xs-12.item-hystory-row
           .col-sm-2.col-xs-2
             = p.price
+            |/
+            = p.residual_price
           .col-sm-2.col-xs-2
             = p.lifetime
           .col-sm-2.col-xs-2
             = p.power
+            |/
+            = p.standbay_power
           .col-sm-2.col-xs-2
             - if p.actual
               span.badge.bg-success.text-white
