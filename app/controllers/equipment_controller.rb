@@ -64,6 +64,6 @@ class EquipmentController < ApplicationController
     end
 
     def equipment_params
-      params.require(:equipment).permit(:name, equipment_parameters_attributes: [:id, :equipment_id, :price, :lifetime, :power, :actual])
+      params.require(:equipment).permit(:name, equipment_parameters_attributes: [:id, :equipment_id, :price, :lifetime, :power, :actual, :residual_price, :standbay_power])
     end
 end
