@@ -7,18 +7,24 @@ table.table.table-striped.table-light.table-hover.mb-4
   thead.bg-secondary.text-white.small
     tr
       th Наименование
-      th Сумма приобретения, руб
+      th Ст-ть первонач/остаточ, руб
       th Срок службы, мес
-      th Мощность, Вт
+      th Мощн-ть ном/ожидания, Вт
       th Действия
 
   tbody
     - @equipments.each do |eq|
       tr
         td = eq.name
-        td = eq.equipment_parameters.last.try :price
+        td
+          = eq.equipment_parameters.last.try :price
+          |&nbsp;/&nbsp;
+          = eq.equipment_parameters.last.try :residual_price
         td = eq.equipment_parameters.last.try :lifetime
-        td = eq.equipment_parameters.last.try :power
+        td
+          = eq.equipment_parameters.last.try :power
+          |&nbsp;/&nbsp;
+          = eq.equipment_parameters.last.try :standbay_power
         td
           /= link_to 'Показать', pos
           = link_to edit_equipment_path(eq) do
