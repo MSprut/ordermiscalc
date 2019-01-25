@@ -1,0 +1,27 @@
+h3.text-center.mt-5 Список категорий потребителей
+
+.row.mb-2.pl-3
+  = link_to 'Новая категория', new_customer_category_path
+
+table.table.table-striped.table-light.table-hover.mb-4
+  thead.bg-secondary.text-white.small
+    tr
+      th Наименование
+      th Сбыт, %
+      th Прибыль, %
+      th Накладные, %
+      th Действия
+
+  tbody
+    - @customer_categories.each do |eq|
+      tr
+        td = eq.name
+        td = eq.customer_category_parameters.last.try :manager_percent
+        td = eq.customer_category_parameters.last.try :profit_percent
+        td = eq.customer_category_parameters.last.try :overheads_percent
+        td
+          /= link_to 'Показать', pos
+          = link_to edit_customer_category_path(eq) do
+            == material_icon.edit
+          = link_to eq, data: { confirm: 'Вы уверены?' }, method: :delete do
+            == material_icon.delete_outline.css_class('text-danger ml-2')

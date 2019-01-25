@@ -1,0 +1,55 @@
+  = render 'layouts/errors', object: @customer_category
+  
+  = form_for @customer_category do |f|
+    .row.mt-5
+      .form-group.col-sm-6
+        = f.text_field :name, class: 'form-control form-control-lg', required: true
+        = f.label :name, 'Наименование', class: 'form-control-placeholder'
+      = f.fields_for :customer_category_parameters, @customer_category.customer_category_parameters.build do |cc|
+        .form-group.col-sm-2
+          = cc.text_field :manager_percent, class: 'form-control form-control-lg', required: true
+          = cc.label :manager_percent, 'Сбыт, %', class: 'form-control-placeholder'
+        .form-group.col-sm-2
+          = cc.text_field :profit_percent, class: 'form-control form-control-lg', required: true
+          = cc.label :profit_percent, 'Прибыль, %', class: 'form-control-placeholder'
+        .form-group.col-sm-2
+          = cc.text_field :overheads_percent, class: 'form-control form-control-lg', required: true
+          = cc.label :overheads_percent, 'Накладные, %', class: 'form-control-placeholder'
+    - if @customer_category.persisted?
+      hr
+      .row.col-sm-12.col-xs-12.mb-2.text-muted.small
+        .col-sm-2.col-xs-2
+          | Сбыт, %
+        .col-sm-2.col-xs-2
+          | Прибыль, %
+        .col-sm-2.col-xs-2
+          | Накладные, %
+        .col-sm-2.col-xs-2
+          | Статус
+        .col-sm-2.col-xs-2
+          | Дата
+        .col-sm-2.col-xs-2
+          | Создана
+      hr.mb-1.mt-1
+      - @customer_category_parameters.each do |p|
+        .row.col-sm-12.col-xs-12.item-hystory-row
+          .col-sm-2.col-xs-2
+            = p.manager_percent
+          .col-sm-2.col-xs-2
+            = p.profit_percent
+          .col-sm-2.col-xs-2
+            = p.overheads_percent
+          .col-sm-2.col-xs-2
+            - if p.actual
+              span.badge.bg-success.text-white
+                | Активный
+            - else
+              span.badge.bg-warning.text-white
+                | Неактивный
+          .col-sm-2.col-xs-2
+            = p.created_at.strftime('%d-%m-%Y / %H:%M')
+          .col-sm-2.col-xs-2
+            | Имя пользователя
+    hr
+    .row.justify-content-center.mt-3.mb-3
+      = f.submit 'Сохранить', class: "btn btn-primary btn-lg"

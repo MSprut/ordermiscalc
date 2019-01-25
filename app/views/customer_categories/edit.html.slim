@@ -1,0 +1,10 @@
+h3.text-center.mt-5 Редактирование категории заказчика
+
+.row.mb-2.pl-3
+  = link_to 'Новая категория', new_customer_category_path
+
+= render 'form'
+
+.row.mb-5.pl-3
+  = link_to 'Список категорий', customer_categories_path
+
