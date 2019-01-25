@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_15_080010) do
+ActiveRecord::Schema.define(version: 2019_01_25_204421) do
 
   create_table "accountant_preferences", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.decimal "income_tax_percent", precision: 5, scale: 2, default: "0.0", null: false
@@ -27,6 +27,26 @@ ActiveRecord::Schema.define(version: 2019_01_15_080010) do
   create_table "calculations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "customer_categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name", default: "", null: false
+    t.boolean "deleted", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "customer_category_parameters", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "customer_category_id"
+    t.bigint "user_id"
+    t.decimal "manager_percent", precision: 5, scale: 2, default: "0.0", null: false
+    t.decimal "profit_percent", precision: 5, scale: 2, default: "0.0", null: false
+    t.decimal "overheads_percent", precision: 5, scale: 2, default: "0.0", null: false
+    t.boolean "actual", default: true, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["customer_category_id"], name: "index_customer_category_parameters_on_customer_category_id"
+    t.index ["user_id"], name: "index_customer_category_parameters_on_user_id"
   end
 
   create_table "equipment", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
