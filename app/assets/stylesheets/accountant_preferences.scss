@@ -2,6 +2,9 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.item-hystory-row:hover {
-  background-color: #e7e7e7;
+.item-hystory-row {
+  font-size: 14px;
+  &:hover {
+    background-color: #e7e7e7;
+  }
 }
