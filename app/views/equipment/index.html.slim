@@ -3,13 +3,14 @@ h3.text-center.mt-5 Список оборудования
 .row.mb-2.pl-3
   = link_to 'Новое оборудование', new_equipment_path
 
-table.table.table-striped.table-light.table-hover.mb-4
+table.table.table-sm.table-striped.table-light.table-hover.mb-4
   thead.bg-secondary.text-white.small
     tr
       th Наименование
       th Ст-ть первонач/остаточ, руб
       th Срок службы, мес
       th Мощн-ть ном/ожидания, Вт
+      th Расчет по
       th Действия
 
   tbody
@@ -20,11 +21,20 @@ table.table.table-striped.table-light.table-hover.mb-4
           = eq.equipment_parameters.last.try :price
           |&nbsp;/&nbsp;
           = eq.equipment_parameters.last.try :residual_price
+          |&nbsp;
+          - if !eq.equipment_parameters.last.depreciation_type
+            span.badge.badge-outlined.badge-primary
+              = eq.equipment_parameters.last.try :price
+          - else
+            span.badge.badge-outlined.badge-primary
+              = eq.equipment_parameters.last&.price - eq.equipment_parameters.last&.residual_price
         td = eq.equipment_parameters.last.try :lifetime
         td
           = eq.equipment_parameters.last.try :power
           |&nbsp;/&nbsp;
           = eq.equipment_parameters.last.try :standbay_power
+        td
+          = eq.equipment_parameters.last.depreciation_type? ? 'ст-ти владения' : 'первонач. ст-ти'
         td
           /= link_to 'Показать', pos
           = link_to edit_equipment_path(eq) do

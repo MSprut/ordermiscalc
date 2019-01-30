@@ -3,64 +3,76 @@
   = form_for @equipment do |f|
     .row.mt-5
       .form-group.col-sm-6
-        = f.text_field :name, class: 'form-control form-control-lg', required: true
+        = f.text_field :name, class: 'form-control form-control-sm', required: true
         = f.label :name, 'Наименование', class: 'form-control-placeholder'
     .row.mt-5
       = f.fields_for :equipment_parameters, @equipment.equipment_parameters.build do |ep|
         .form-group.col-sm-2
-          = ep.text_field :price, class: 'form-control form-control-lg', required: true
+          = ep.text_field :price, class: 'form-control form-control-sm', required: true
           = ep.label :price, 'Первонач. ст-ть, руб', class: 'form-control-placeholder'
         .form-group.col-sm-2
-          = ep.text_field :residual_price, class: 'form-control form-control-lg', required: true
+          = ep.text_field :residual_price, class: 'form-control form-control-sm', required: true
           = ep.label :residual_price, 'Остаточ. ст-ть, руб', class: 'form-control-placeholder'
         .form-group.col-sm-2
-          = ep.text_field :lifetime, class: 'form-control form-control-lg', required: true
+          = ep.text_field :lifetime, class: 'form-control form-control-sm', required: true
           = ep.label :lifetime, 'Срок службы, мес', class: 'form-control-placeholder'
         .form-group.col-sm-2
-          = ep.text_field :power, class: 'form-control form-control-lg', required: true
+          = ep.text_field :power, class: 'form-control form-control-sm', required: true
           = ep.label :power, 'Мощность, Вт', class: 'form-control-placeholder'
         .form-group.col-sm-2
-          = ep.text_field :standbay_power, class: 'form-control form-control-lg', required: true
+          = ep.text_field :standbay_power, class: 'form-control form-control-sm', required: true
           = ep.label :standbay_power, 'Мощн-ть ожидания, Вт', class: 'form-control-placeholder'
+        .form-group.col-sm-2
+          .checkbox.checkbox-inline.checkbox-info.checkbox-sm
+            = ep.check_box :depreciation_type, class: 'styled'
+            = ep.label :depreciation_type, 'Тип аммортизации', class: 'form-control-placeholder'
     - if @equipment.persisted?
       hr
       .row.col-sm-12.col-xs-12.mb-2.text-muted.small
-        .col-sm-2.col-xs-2
+        .col-sm-3.col-xs-3
           | Стоимость, руб
         .col-sm-2.col-xs-2
           | Срок службы, мес
         .col-sm-2.col-xs-2
           | Мощность, Вт
-        .col-sm-2.col-xs-2
-          | Статус
-        .col-sm-2.col-xs-2
-          | Дата
+        .col-sm-3.col-xs-3
+          | Дата / Статус
         .col-sm-2.col-xs-2
           | Создана
       hr.mb-1.mt-1
       - @equipment_parameters.each do |p|
         .row.col-sm-12.col-xs-12.item-hystory-row
-          .col-sm-2.col-xs-2
+          .col-sm-3.col-xs-3
             = p.price
             |&nbsp;/&nbsp;
             = p.residual_price
+            |&nbsp;
+            - if !p.depreciation_type
+              span.badge.badge-outlined.badge-primary
+                = p.price
+            - else
+              span.badge.badge-outlined.badge-primary
+                = p.price - p.residual_price
           .col-sm-2.col-xs-2
             = p.lifetime
           .col-sm-2.col-xs-2
             = p.power
             |&nbsp;/&nbsp;
             = p.standbay_power
-          .col-sm-2.col-xs-2
+          .col-sm-3.col-xs-3
+            = p.created_at.strftime('%d-%m-%Y / %H:%M')
+            |&nbsp;
             - if p.actual
               span.badge.bg-success.text-white
-                | Активный
+                | &nbsp;&nbsp;
             - else
               span.badge.bg-warning.text-white
-                | Неактивный
-          .col-sm-2.col-xs-2
-            = p.created_at.strftime('%d-%m-%Y / %H:%M')
+                | &nbsp;&nbsp;
           .col-sm-2.col-xs-2
             | Имя пользователя
+            |&nbsp;
+            = link_to remove_item_equipment_equipment_parameter_path(@equipment, p), data: { confirm: 'Вы уверены?' }, method: :delete do
+              == material_icon.delete_forever.css_class('text-danger align-middle')
     hr
     .row.justify-content-center.mt-3.mb-3
-      = f.submit 'Сохранить', class: "btn btn-primary btn-lg"
+      = f.submit 'Сохранить', class: "btn btn-primary btn-sm"

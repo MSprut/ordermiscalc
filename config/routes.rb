@@ -4,11 +4,19 @@ Rails.application.routes.draw do
   resources :inventories
   resources :units
   resources :accountant_preferences
-  resources :equipment
+  #resources :equipment
   resources :positions
   get 'static_pages/home'
   get 'static_pages/help'
   resources :calculations
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root 'static_pages#home' #'calculations#index'
+
+  resources :equipment do
+    resources :equipment_parameters do
+      member do
+        delete 'remove_item', to: 'equipment#remove_item'
+      end
+    end
+  end
 end

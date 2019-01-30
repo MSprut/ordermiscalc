@@ -13,4 +13,8 @@ class EquipmentParameter < ApplicationRecord
   def self.set_irrelevant(equipment_id)
     joins(:equipment).where(equipment_id: equipment_id).update_all(actual: false)
   end
+
+  def self.set_actual
+    order(created_at: :desc).limit(1).update(actual: true)
+  end
 end
