@@ -11,4 +11,8 @@ class InventoryParameter < ApplicationRecord
   def self.set_irrelevant(inventory_id)
     joins(:inventory).where(inventory_id: inventory_id).update_all(actual: false)
   end
+
+  def self.set_actual
+    order(created_at: :desc).limit(1).update(actual: true)
+  end
 end
