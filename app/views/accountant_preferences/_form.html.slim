@@ -3,22 +3,22 @@
   = form_for @accountant_preference do |f|
     .row.pt-5
       .form-group.col-sm-2
-        = f.text_field :income_tax_percent, class: 'form-control form-control-lg', required: true
+        = f.text_field :income_tax_percent, class: 'form-control form-control-sm', required: true
         = f.label :income_tax_percent, 'НДФЛ, %', class: 'form-control-placeholder'
       .form-group.col-sm-2
-        = f.text_field :eru_tax_percent, class: 'form-control form-control-lg', required: true
+        = f.text_field :eru_tax_percent, class: 'form-control form-control-sm', required: true
         = f.label :eru_tax_percent, 'ЕСВ, %', class: 'form-control-placeholder'
       .form-group.col-sm-2
-        = f.text_field :manager_percent, class: 'form-control form-control-lg', required: true
+        = f.text_field :manager_percent, class: 'form-control form-control-sm', required: true
         = f.label :manager_percent, 'Расходы на сбыт, %', class: 'form-control-placeholder'
       .form-group.col-sm-2
-        = f.text_field :profit_percent, class: 'form-control form-control-lg', required: true
+        = f.text_field :profit_percent, class: 'form-control form-control-sm', required: true
         = f.label :profit_percent, 'Прибыль, %', class: 'form-control-placeholder'
       .form-group.col-sm-2
-        = f.text_field :overheads_percent, class: 'form-control form-control-lg', required: true
+        = f.text_field :overheads_percent, class: 'form-control form-control-sm', required: true
         = f.label :overheads_percent, 'Расходы накладные, %', class: 'form-control-placeholder'
       .form-group.col-sm-2
-        = f.text_field :tax_percent, class: 'form-control form-control-lg', required: true
+        = f.text_field :tax_percent, class: 'form-control form-control-sm', required: true
         = f.label :tax_percent, 'Налог, %', class: 'form-control-placeholder'
 
     - if @accountant_preference.persisted?
@@ -70,4 +70,4 @@
             | Имя пользователя
     hr
     .row.justify-content-center.mt-3.mb-3
-      = f.submit 'Сохранить', class: "btn btn-primary btn-lg"
+      = f.submit 'Сохранить', class: "btn btn-primary btn-sm"

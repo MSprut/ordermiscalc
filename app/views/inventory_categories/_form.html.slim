@@ -3,16 +3,16 @@
   = form_for @inventory_category do |f|
     .row.mt-5
       .form-group.col-sm-6
-        = f.text_field :name, class: 'form-control form-control-lg', required: true
+        = f.text_field :name, class: 'form-control form-control-sm', required: true
         = f.label :name, 'Наименование', class: 'form-control-placeholder'
       .form-group.col-sm-6
         = f.label :parent_id, 'Родительская категория', class: 'small-label-placeholder'
-        = f.select :parent_id, @inventory_categories, { include_blank: '...' }, { class: 'form-control form-control-lg' }
+        = f.select :parent_id, @inventory_categories, { include_blank: '...' }, { class: 'form-control form-control-sm' }
     .row.mt-3
       .form-group.col-sm-6
         = f.label :inventory_ids, 'ТМЦ', class: 'control-label small-label-placeholder'
-        = f.select :inventory_ids, @inventories, { include_blank: '...' }, class: 'form-control form-control-lg', multiple: true
+        = f.select :inventory_ids, @inventories, { include_blank: '...' }, class: 'form-control form-control-sm', multiple: true
 
     hr
     .row.justify-content-center.mt-3.mb-3
-      = f.submit 'Сохранить', class: "btn btn-primary btn-lg"
+      = f.submit 'Сохранить', class: "btn btn-primary btn-sm"

@@ -1,5 +1,5 @@
 class InventoriesController < ApplicationController
-  before_action :set_inventory, only: [:show, :edit, :update, :destroy]
+  before_action :set_inventory, only: [:show, :edit, :update, :destroy, :remove_item]
 
   def index
     @inventories = Inventory.where(deleted: false).order(name: :asc)
@@ -60,10 +60,26 @@ class InventoriesController < ApplicationController
     end
   end
 
+  def remove_item
+    item = InventoryParameter.find(params[:id])
+
+    respond_to do |format|
+      if item.destroy
+        puts "\n" + 'INVENTORY= ' + @inventory.inspect + "\n\r"
+        @inventory.set_actual_parameter
+        flash[:success] = 'История успешно удалена.'
+      else
+        flash[:error] = 'Ошибка удаления истории.'
+      end
+      format.html { redirect_to edit_inventory_path(@inventory) }
+    end
+  end
+
   private
 
     def set_inventory
-      @inventory = Inventory.find(params[:id])
+      id = params[:inventory_id].present? ? params[:inventory_id] : params[:id]
+      @inventory = Inventory.find(id)
     end
 
     def inventory_params

@@ -72,7 +72,7 @@
             | Имя пользователя
             |&nbsp;
             = link_to remove_item_equipment_equipment_parameter_path(@equipment, p), data: { confirm: 'Вы уверены?' }, method: :delete do
-              == material_icon.delete_forever.css_class('text-danger align-middle')
+              == material_icon.delete_forever.css_class('text-danger')
     hr
     .row.justify-content-center.mt-3.mb-3
       = f.submit 'Сохранить', class: "btn btn-primary btn-sm"

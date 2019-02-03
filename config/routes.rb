@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   resources :customer_categories
   resources :inventory_categories
-  resources :inventories
+  #resources :inventories
   resources :units
   resources :accountant_preferences
   #resources :equipment
@@ -16,6 +16,14 @@ Rails.application.routes.draw do
     resources :equipment_parameters do
       member do
         delete 'remove_item', to: 'equipment#remove_item'
+      end
+    end
+  end
+
+  resources :inventories do
+    resources :inventory_parameters do
+      member do
+        delete 'remove_item', to: 'inventories#remove_item'
       end
     end
   end

@@ -3,11 +3,11 @@
   = form_for @position do |f|
     .row
       .form-group.col-sm-6.mt-5
-        = f.text_field :name, class: 'form-control form-control-lg', required: true
+        = f.text_field :name, class: 'form-control form-control-sm', required: true
         = f.label :name, 'Должность', class: 'form-control-placeholder'
       = f.fields_for :position_salaries, @position.position_salaries.build do |ps|
         .form-group.col-sm-6.mt-5
-          = ps.text_field :salary, class: 'form-control form-control-lg', required: true
+          = ps.text_field :salary, class: 'form-control form-control-sm', required: true
           = ps.label :salary, 'Оклад, руб', class: 'form-control-placeholder'
           = ps.hidden_field :accountant_preference_id, value: @accountant_preference.first.id
     - if @position.persisted?
@@ -52,4 +52,4 @@
             | Имя пользователя
     hr
     .row.justify-content-center.mt-3.mb-3
-      = f.submit 'Сохранить', class: "btn btn-primary btn-lg"
+      = f.submit 'Сохранить', class: "btn btn-primary btn-sm"

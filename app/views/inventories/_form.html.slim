@@ -4,20 +4,20 @@
     .row.mt-5
       .form-group.col-sm-6
         = f.label :unit_id, 'Категория', class: 'control-label small-label-placeholder'
-        = f.select :unit_id, @inventory_categories, { include_blank: '...' }, class: 'form-control form-control-lg', required: true
+        = f.select :unit_id, @inventory_categories, { include_blank: '...' }, class: 'form-control form-control-sm'
     .row.mt-5
       .form-group.col-sm-6
-        = f.text_field :name, class: 'form-control form-control-lg', required: true
+        = f.text_field :name, class: 'form-control form-control-sm', required: true
         = f.label :name, 'Наименование', class: 'form-control-placeholder'
       .form-group.col-sm-2
         = f.label :unit_id, 'Ед. измерения', class: 'small-label-placeholder'
-        = f.select :unit_id, @units, { include_blank: '' }, { class: 'form-control form-control-lg', required: true }
+        = f.select :unit_id, @units, { include_blank: '' }, { class: 'form-control form-control-sm', required: true }
       = f.fields_for :inventory_parameters, @inventory.inventory_parameters.build do |ip|
         .form-group.col-sm-2
-          = ip.text_field :price, class: 'form-control form-control-lg', required: true
+          = ip.text_field :price, class: 'form-control form-control-sm', required: true
           = ip.label :price, 'Стоимость, руб', class: 'form-control-placeholder'
         .form-group.col-sm-2
-          = ip.text_field :margin, class: 'form-control form-control-lg', required: true
+          = ip.text_field :margin, class: 'form-control form-control-sm', required: true
           = ip.label :margin, 'Наценка, %', class: 'form-control-placeholder'
     - if @inventory.persisted?
       hr
@@ -26,8 +26,6 @@
           | Стоимость, руб
         .col-sm-2.col-xs-2
           | Наценка, %
-        .col-sm-2.col-xs-2
-          | Статус
         .col-sm-2.col-xs-2
           | Дата
         .col-sm-2.col-xs-2
@@ -40,16 +38,19 @@
           .col-sm-2.col-xs-2
             = ip.margin
           .col-sm-2.col-xs-2
+            = ip.created_at.strftime('%d-%m-%Y / %H:%M')
+            |&nbsp;
             - if ip.actual
               span.badge.bg-success.text-white
-                | Активный
+                | &nbsp;&nbsp;
             - else
               span.badge.bg-warning.text-white
-                | Неактивный
-          .col-sm-2.col-xs-2
-            = ip.created_at.strftime('%d-%m-%Y / %H:%M')
+                | &nbsp;&nbsp;
           .col-sm-2.col-xs-2
             | Имя пользователя
+            |&nbsp;
+            = link_to remove_item_inventory_inventory_parameter_path(@inventory, ip), data: { confirm: 'Вы уверены?' }, method: :delete do
+              == material_icon.delete_forever.css_class('text-danger')
     hr
     .row.justify-content-center.mt-3.mb-3
-      = f.submit 'Сохранить', class: "btn btn-primary btn-lg"
+      = f.submit 'Сохранить', class: "btn btn-primary btn-sm"

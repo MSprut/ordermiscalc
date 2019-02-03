@@ -3,17 +3,17 @@
   = form_for @customer_category do |f|
     .row.mt-5
       .form-group.col-sm-6
-        = f.text_field :name, class: 'form-control form-control-lg', required: true
+        = f.text_field :name, class: 'form-control form-control-sm', required: true
         = f.label :name, 'Наименование', class: 'form-control-placeholder'
       = f.fields_for :customer_category_parameters, @customer_category.customer_category_parameters.build do |cc|
         .form-group.col-sm-2
-          = cc.text_field :manager_percent, class: 'form-control form-control-lg', required: true
+          = cc.text_field :manager_percent, class: 'form-control form-control-sm', required: true
           = cc.label :manager_percent, 'Сбыт, %', class: 'form-control-placeholder'
         .form-group.col-sm-2
-          = cc.text_field :profit_percent, class: 'form-control form-control-lg', required: true
+          = cc.text_field :profit_percent, class: 'form-control form-control-sm', required: true
           = cc.label :profit_percent, 'Прибыль, %', class: 'form-control-placeholder'
         .form-group.col-sm-2
-          = cc.text_field :overheads_percent, class: 'form-control form-control-lg', required: true
+          = cc.text_field :overheads_percent, class: 'form-control form-control-sm', required: true
           = cc.label :overheads_percent, 'Накладные, %', class: 'form-control-placeholder'
     - if @customer_category.persisted?
       hr
@@ -52,4 +52,4 @@
             | Имя пользователя
     hr
     .row.justify-content-center.mt-3.mb-3
-      = f.submit 'Сохранить', class: "btn btn-primary btn-lg"
+      = f.submit 'Сохранить', class: "btn btn-primary btn-sm"
