@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_29_090244) do
+ActiveRecord::Schema.define(version: 2019_02_08_150116) do
 
   create_table "accountant_preferences", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.decimal "income_tax_percent", precision: 5, scale: 2, default: "0.0", null: false
@@ -24,9 +24,30 @@ ActiveRecord::Schema.define(version: 2019_01_29_090244) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "calculation_categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name", default: "", null: false
+    t.string "ancestry"
+    t.boolean "deleted", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["ancestry"], name: "index_calculation_categories_on_ancestry"
+  end
+
+  create_table "calculation_categories_calculations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "calculation_category_id"
+    t.bigint "calculation_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["calculation_category_id"], name: "index_calc_cats_calcs_on_calc_cat_id"
+    t.index ["calculation_id"], name: "index_calc_cats_calcs_on_calc_id"
+  end
+
   create_table "calculations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name", default: "", null: false
+    t.decimal "price", precision: 10, scale: 2, default: "0.0", null: false
+    t.boolean "deleted", default: false, null: false
   end
 
   create_table "customer_categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|

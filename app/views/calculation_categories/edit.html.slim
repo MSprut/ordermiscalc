@@ -1,0 +1,9 @@
+h3.text-center.mt-5 Редактирование категории калькуляций
+
+.row.mb-2.pl-3
+  = link_to 'Новая категория калькуляций', new_calculation_category_path
+
+= render 'form'
+
+.row.mb-5.pl-3
+  = link_to 'Список категорий калькуляций', calculation_categories_path

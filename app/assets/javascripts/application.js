@@ -22,7 +22,8 @@
 //= require_tree .
 
 
-// require inventory_categories
+//= require inventory_categories
+//= require calculation_categories
 
 /*$(function () {
     $('.tree li:has(ul)').addClass('parent_li').find(' > span').attr('title', 'Свернуть ветку');

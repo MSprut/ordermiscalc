@@ -2,7 +2,8 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-$(document).on 'ready page:load', ->
+#$(document).on 'ready page:load', ->
+$(document).on 'turbolinks:load', ->
   $ ->
     $('.tree li:has(ul)').addClass('parent_li').find(' > span').attr 'title', 'Свернуть ветку'
   

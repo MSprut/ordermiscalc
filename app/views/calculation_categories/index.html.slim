@@ -1,0 +1,10 @@
+h3.text-center.mt-5 Список категорий калькуляций
+
+.row.mb-2.pl-3
+  = link_to 'Новая категория калькуляций', new_calculation_category_path
+
+.row.mt-3.mb-5
+  .col-xs-12.col-md-12
+    .accordion
+      .accordion-group
+        = show_calculation_categories_list @calculation_categories

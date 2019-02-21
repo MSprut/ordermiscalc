@@ -1,0 +1,70 @@
+// Place all the styles related to the CalculationCategories controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.accordion-heading {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  background-color: #c7bef5;
+  margin-bottom: 3px;
+  
+  i {
+    margin-left: 15px;
+    color: #555;
+    font-size: 14px;
+    width: 15px;
+  }
+  
+  a {
+    display: block;
+    width: 100%;
+    outline: 0;
+    text-decoration: none;
+    color: #555;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 3px 0px;
+
+    span {
+      margin-left: 10px;
+    }
+
+    &:hover,
+    &:visited,
+    &:active {
+      text-decoration: none;
+      outline: 0;
+      color: #555;
+    }
+  }
+
+  .category-action {
+    display: flex;
+    i {
+      font-size: 20px !important;
+      vertical-align: middle;
+    }
+  }
+}
+
+.category-header {
+  font-size: 12px;
+  border-top: hidden;
+  background-color: #dff5a4;
+}
+
+.accordion-inner {
+  margin-left: 20px;
+  table {
+    table-layout: fixed;
+    width: 100%;
+    word-break: break-word;
+    margin-bottom: 3px;
+  }
+}
+
+.accordion-body {
+  border-left: 1px solid #ccc;
+}
