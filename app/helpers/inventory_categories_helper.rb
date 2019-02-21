@@ -4,7 +4,7 @@ module InventoryCategoriesHelper
     categories.map do |category, sub_categories|
       (tag.div class: 'accordion-heading' do
         link = category.name.parameterize
-        (link_to "##{category.name.gsub(/\s+/, '-').downcase}", class: 'accordion-toggle', data: { toggle: "collapse" } do
+        (link_to "##{category.name.gsub(/[\s,]+/, '-').downcase}", class: 'accordion-toggle', data: { toggle: "collapse" } do
           concat tag.i class: 'fa fa-folder'
           concat tag.span "#{category.name}"
           concat tag.span "подкат: #{category.children.count}", class: 'badge badge-success'
@@ -20,7 +20,7 @@ module InventoryCategoriesHelper
         end)
       end) +
 
-      (tag.div class: 'accordion-body collapse', id: "#{category.name.gsub(/\s+/, '-').downcase}" do
+      (tag.div class: 'accordion-body collapse', id: "#{category.name.gsub(/[\s,]+/, '-').downcase}" do
         (tag.div nil, class: 'accordion-inner' do
           if category.inventories.present?
             concat (tag.table class: 'table table-striped table-sm table-light table-hover' do
