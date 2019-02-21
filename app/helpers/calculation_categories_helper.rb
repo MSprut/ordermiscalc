@@ -32,7 +32,7 @@ module CalculationCategoriesHelper
               end) +
 
               (content_tag :tbody do
-                category.calculations.each do |calc|
+                category.calculations.order(name: :asc).each do |calc|
                   concat (content_tag :tr, class: 'd-flex' do
                     concat content_tag :td, calc.name, class: 'col-8'
                     concat content_tag :td, calc.price, class: 'col-2'

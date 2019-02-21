@@ -4,7 +4,7 @@ class InventoryCategoriesController < ApplicationController
   # GET /inventory_categories
   # GET /inventory_categories.json
   def index
-    @inventory_categories = InventoryCategory.all.arrange
+    @inventory_categories = InventoryCategory.all.arrange(order: :name)
   end
 
   # GET /inventory_categories/1

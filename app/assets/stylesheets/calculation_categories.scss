@@ -72,3 +72,15 @@
 .accordion-body {
   border-left: 1px solid #ccc;
 }
+
+.collapse-all,
+.expand-all {
+  font-size: 21px;
+  padding: 0 7px;
+  margin-left: 15px;
+
+  &:visited,
+  &:active {
+    outline: 0;
+  }
+}

@@ -4,7 +4,7 @@ class CalculationCategoriesController < ApplicationController
   # GET /calculation_categories
   # GET /calculation_categories.json
   def index
-    @calculation_categories = CalculationCategory.all.arrange
+    @calculation_categories = CalculationCategory.all.arrange(order: :name)
   end
 
   # GET /calculation_categories/1

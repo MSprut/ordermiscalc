@@ -34,7 +34,7 @@ module InventoryCategoriesHelper
               end) +
 
               (tag.tbody do
-                category.inventories.each do |inv|
+                category.inventories.order(name: :asc).each do |inv|
                   concat (tag.tr class: 'd-flex' do
                     concat tag.td inv.name, class: 'col-7'
                     concat tag.td inv.unit.name, class: 'col-1'

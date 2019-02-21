@@ -10,3 +10,20 @@ $(document).on 'turbolinks:load', ->
 
   $('.accordion-toggle').on 'click', ->
     $(this).find('i').toggleClass('fa-folder fa-folder-open')
+
+  $('.collapse-all').on 'click', (e) ->
+    #e.prevenDeffault()
+    e.stopImmediatePropagation()
+    $('.collapse').collapse('hide');
+    #$('.accordion').find('.accordion-toggle i').toggleClass('fa-folder fa-folder-open')
+    $('.accordion').find('.accordion-toggle i').addClass('fa-folder')
+    $('.accordion').find('.accordion-toggle i').removeClass('fa-folder-open')
+
+
+  $('.expand-all').on 'click', (e) ->
+    #e.prevenDeffault()
+    e.stopImmediatePropagation()
+    $('.collapse').collapse('show');
+    #$('.accordion').find('.accordion-toggle i').toggleClass('fa-folder fa-folder-open')
+    $('.accordion').find('.accordion-toggle i').addClass('fa-folder-open')
+    $('.accordion').find('.accordion-toggle i').removeClass('fa-folder')

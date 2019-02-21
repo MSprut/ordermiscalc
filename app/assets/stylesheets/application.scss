@@ -164,3 +164,11 @@ select.form-control option {
     vertical-align: middle;
   }
 }
+
+.fa-rotate-45 {
+    -webkit-transform: rotate(315deg);
+    -moz-transform: rotate(315deg);
+    -ms-transform: rotate(315deg);
+    -o-transform: rotate(315deg);
+    transform: rotate(315deg);
+}
