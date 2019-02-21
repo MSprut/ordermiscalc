@@ -6,6 +6,8 @@ module CalculationCategoriesHelper
         (link_to "##{category.name.gsub(/\s+/, '-').downcase}", class: 'accordion-toggle', data: { toggle: "collapse" } do
           concat content_tag :i, nil, class: 'fa fa-folder'
           concat content_tag :span, "#{category.name}"
+          concat tag.span "подкат: #{category.children.count}", class: 'badge badge-success'
+          concat tag.span "кальк: #{category.calculations.count}", class: 'badge badge-warning inventories-count'
         end) +
         (tag.div class: 'category-action pull-right' do
           (link_to edit_calculation_category_path(category) do
@@ -22,19 +24,19 @@ module CalculationCategoriesHelper
           if category.calculations.present?
             concat (content_tag :table, nil, class: 'table table-striped table-sm table-light table-hover' do
               (content_tag :thead, nil, class: 'category-header' do
-                concat (content_tag :tr do
-                  concat content_tag :th, 'Наименование'
-                  concat content_tag :th, 'Ст-ть услуги, руб'
-                  concat content_tag :th, 'Действия'
+                concat (content_tag :tr, class: 'd-flex' do
+                  concat content_tag :th, 'Наименование', class: 'col-8'
+                  concat content_tag :th, 'Ст-ть, руб', class: 'col-2'
+                  concat content_tag :th, 'Действия', class: 'col-1'
                 end)
               end) +
 
               (content_tag :tbody do
                 category.calculations.each do |calc|
-                  concat (content_tag :tr do
-                    concat content_tag :td, calc.name
-                    concat content_tag :td, calc.price
-                    concat (content_tag :td do
+                  concat (content_tag :tr, class: 'd-flex' do
+                    concat content_tag :td, calc.name, class: 'col-8'
+                    concat content_tag :td, calc.price, class: 'col-2'
+                    concat (content_tag :td, class: 'col-1' do
                       (link_to edit_calculation_path(calc) do
                         content_tag(:i, 'edit', class: "material-icons").html_safe
                       end) +

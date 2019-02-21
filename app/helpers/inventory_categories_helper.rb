@@ -7,6 +7,8 @@ module InventoryCategoriesHelper
         (link_to "##{category.name.gsub(/\s+/, '-').downcase}", class: 'accordion-toggle', data: { toggle: "collapse" } do
           concat tag.i class: 'fa fa-folder'
           concat tag.span "#{category.name}"
+          concat tag.span "подкат: #{category.children.count}", class: 'badge badge-success'
+          concat tag.span "тмц: #{category.inventories.count}", class: 'badge badge-warning inventories-count'
         end) +
         (tag.div class: 'category-action pull-right' do
           (link_to edit_inventory_category_path(category) do
@@ -23,21 +25,21 @@ module InventoryCategoriesHelper
           if category.inventories.present?
             concat (tag.table class: 'table table-striped table-sm table-light table-hover' do
               concat (tag.thead class: 'category-header' do
-                concat (tag.tr do
-                  concat tag.th 'Наименование'
-                  concat tag.th 'Ед. измер-я'
-                  concat tag.th 'Ст-ть, руб'
-                  concat tag.th 'Действия'
+                concat (tag.tr class: 'd-flex' do
+                  concat tag.th 'Наименование', class: 'col-7'
+                  concat tag.th 'Ед. изм.', class: 'col-1'
+                  concat tag.th 'Ст-ть, руб', class: 'col-2'
+                  concat tag.th 'Действия', class: 'col-1'
                 end)
               end) +
 
               (tag.tbody do
                 category.inventories.each do |inv|
-                  concat (tag.tr do
-                    concat tag.td inv.name
-                    concat tag.td inv.unit.name
-                    concat tag.td inv.inventory_parameters.last.try(:price)
-                    concat (tag.td do
+                  concat (tag.tr class: 'd-flex' do
+                    concat tag.td inv.name, class: 'col-7'
+                    concat tag.td inv.unit.name, class: 'col-1'
+                    concat tag.td inv.inventory_parameters.last.try(:price), class: 'col-2'
+                    concat (tag.td class: 'col-1' do
                       (link_to edit_inventory_path(inv) do
                         (tag.i 'edit', class: "material-icons").html_safe
                       end) +
