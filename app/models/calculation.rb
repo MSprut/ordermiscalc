@@ -2,6 +2,9 @@ class Calculation < ApplicationRecord
 
   validates :name, presence: true
 
+  scope :not_deleted, -> { where(deleted: false) }
+  scope :deleted, -> { where(deleted: true) }
+
   #----- POSITIONS -------------------------------------
   has_many :calc_positions, :dependent => :destroy
   accepts_nested_attributes_for :calc_positions,

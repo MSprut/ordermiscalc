@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   resources :calculations do
     collection do
       get 'get_unit_and_price', to: "calculations#get_unit_and_price"
+      delete "restore/:id" => "calculations#restore", as: :restore
     end
   end
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

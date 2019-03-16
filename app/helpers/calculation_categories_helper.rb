@@ -7,7 +7,7 @@ module CalculationCategoriesHelper
           concat content_tag :i, nil, class: 'fa fa-folder'
           concat content_tag :span, "#{category.name}"
           concat tag.span "подкат: #{category.children.count}", class: 'badge badge-success'
-          concat tag.span "кальк: #{category.calculations.count}", class: 'badge badge-warning inventories-count'
+          concat tag.span "кальк: #{category.calculations.not_deleted.count}", class: 'badge badge-warning inventories-count'
         end) +
         (tag.div class: 'category-action pull-right' do
           (link_to edit_calculation_category_path(category), target: :_blank do
@@ -21,7 +21,7 @@ module CalculationCategoriesHelper
 
       (content_tag :div, nil, class: 'accordion-body collapse', id: "#{category.name.gsub(/[\s,]+/, '-').downcase}" do
         (content_tag :div, nil, class: 'accordion-inner' do
-          if category.calculations.present?
+          if category.calculations.not_deleted.present?
             concat (content_tag :table, nil, class: 'table table-striped table-sm table-light table-hover' do
               (content_tag :thead, nil, class: 'category-header' do
                 concat (content_tag :tr, class: 'd-flex' do
@@ -32,7 +32,7 @@ module CalculationCategoriesHelper
               end) +
 
               (content_tag :tbody do
-                category.calculations.order(name: :asc).each do |calc|
+                category.calculations.not_deleted.order(name: :asc).each do |calc|
                   concat (content_tag :tr, class: 'd-flex' do
                     concat content_tag :td, calc.name, class: 'col-8'
                     concat content_tag :td, '%.4f' % calc.price, class: 'col-2'

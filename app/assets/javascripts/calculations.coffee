@@ -11,6 +11,9 @@ $(document).on 'turbolinks:load', ->
   counter['amortizations'] = 1
   ajax_requests = []
 
+  $ ->
+    $('.selectpicker').selectpicker 'render'
+
   window.getBlockPrefix = (obj, is_table) ->
     is_table = is_table || false
     if is_table == true

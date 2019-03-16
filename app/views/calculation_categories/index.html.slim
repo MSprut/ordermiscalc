@@ -1,12 +1,14 @@
 h3.text-center.mt-5 Список калькуляций
 
 .row.mb-2.pl-3
-  .col-xs-9.col-md-10
+  .col-xs-9.col-md-9
     = link_to 'Новая категория калькуляций', new_calculation_category_path, target: :_blank
+  .col-xs-3.col-md-3.text-right
+    = link_to 'Удаленные калькуляции', calculations_path, target: :_blank, class: 'text-danger'
 .row.bm-2.pl-3
   .col-xs-9.col-md-10
     = link_to 'Новая калькуляция', new_calculation_path, target: :_blank
-  .col-xs-1.col-md-1.d-flex
+  .col-xs-3.col-md-2.d-flex.justify-content-end
     = button_tag '#', class: 'btn btn-outline-primary btn-sm collapse-all' do
       i.fa.fa-compress.fa-rotate-45
     = button_tag '#', class: 'btn btn-outline-primary btn-sm expand-all' do

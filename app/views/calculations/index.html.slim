@@ -1,0 +1,23 @@
+h3.text-center.mt-5 Список удаленных калькуляций
+
+.row.mb-2.pl-3
+  = link_to 'Новая калькуляция', new_calculation_path
+
+table.table.table-sm.table-striped.table-light.table-hover.mb-4
+  thead.bg-secondary.text-white.small
+    tr
+      th Наименование
+      th Стоимость, руб
+      th Действия
+
+  tbody
+    - @calculations.each do |c|
+      tr
+        td = c.name
+        th = c.price
+        td
+          = link_to restore_calculations_path(c), data: { confirm: 'Вы уверены, что хотите восстановить калькуляцию?' }, method: :delete do
+            == material_icon.restore_from_trash.css_class('text-success ml-2')
+
+.row.mb-5.pl-3
+  = link_to 'Список калькуляций', calculation_categories_path

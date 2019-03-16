@@ -1,12 +1,12 @@
 class CalculationsController < ApplicationController
   include PositionsHelper
 
-  before_action :set_calculation, only: [:show, :edit, :update, :destroy]
+  before_action :set_calculation, only: [:show, :edit, :update, :destroy, :restore]
 
   # GET /calculations
   # GET /calculations.json
   def index
-    @calculations = Calculation.all
+    @calculations = Calculation.deleted.all
   end
 
   # GET /calculations/1
@@ -68,10 +68,20 @@ class CalculationsController < ApplicationController
   # DELETE /calculations/1
   # DELETE /calculations/1.json
   def destroy
-    @calculation.destroy
+    #@calculation.destroy
+    @calculation.update_column(:deleted, true)
     respond_to do |format|
       flash[:danger] = 'Калькуляция успешно удалена.'
       format.html { redirect_to calculation_categories_path }
+      format.json { head :no_content }
+    end
+  end
+
+  def restore
+    @calculation.update_column(:deleted, false)
+    respond_to do |format|
+      flash[:success] = 'Калькуляция успешно восстановлена.'
+      format.html { redirect_to calculations_path }
       format.json { head :no_content }
     end
   end
@@ -143,9 +153,9 @@ class CalculationsController < ApplicationController
 
     def preload_nested_params
       @calculation_categories = collection_for_parent_select
-      @inventory_parameters = InventoryParameter.where(actual: true).collect { |i| [ i.inventory.name, i.id ] }
-      @position_salaries = PositionSalary.where(actual: true).collect { |p| [ p.position.name, p.id ] }
-      @equipment_parameters = EquipmentParameter.where(actual: true).collect { |e| [ e.equipment.name, e.id ] }
+      @inventory_parameters = InventoryParameter.where(actual: true).includes(:inventory).order('inventories.name asc').collect { |i| [ i.inventory.name, i.id ] }
+      @position_salaries = PositionSalary.where(actual: true).includes(:position).order('positions.name asc').collect { |p| [ p.position.name, p.id ] }
+      @equipment_parameters = EquipmentParameter.where(actual: true).includes(:equipment).order('equipment.name asc').collect { |e| [ e.equipment.name, e.id ] }
       @customer_categories = CustomerCategory.where(deleted: false).order(name: :asc).all
     end
 
