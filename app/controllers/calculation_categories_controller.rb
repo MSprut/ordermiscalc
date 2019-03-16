@@ -88,7 +88,7 @@ class CalculationCategoriesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def calculation_category_params
-      params.require(:calculation_category).permit(:name, :parent_id)
+      params.require(:calculation_category).permit(:name, :parent_id, calculation_ids: [])
     end
 
     def collection_for_parent_select

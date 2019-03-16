@@ -1,0 +1,22 @@
+<%# logger.debug('NUM: '+@num.to_s) %>
+<%# logger.debug('BLOCK: '+@block.to_s) %>
+<%# logger.debug('PRICE: '+@price.to_s) %>
+<%# logger.debug('UNIT_NAME: '+@unit.to_s) %>
+
+
+$("label[for='calculation_calc_" + '<%= @block %>' + "_attributes_" + <%= @num %>+"_unit']").text('<%= @unit %>');
+$("label[for='calculation_calc_" + '<%= @block %>' + "_attributes_" + <%= @num %>+"_salary']").text('<%= @price %>');
+$("label[for='calculation_calc_" + '<%= @block %>' + "_attributes_" + <%= @num %>+"_lifetime']").text('<%= @lifetime %>');
+$("label[for='calculation_calc_" + '<%= @block %>' + "_attributes_" + <%= @num %>+"_price']").text('<%= @price %>');
+$("label[for='calculation_calc_" + '<%= @block %>' + "_attributes_" + <%= @num %>+"_rate']").text('<%= @rate %>');
+
+<% if @unit == "м.кв" %>
+	$("#calculation_calc_" + '<%= @block %>' + "_attributes_" + <%= @num %> + "_width").attr('readonly', false);
+	$("#calculation_calc_" + '<%= @block %>' + "_attributes_" + <%= @num %> + "_length").attr('readonly', false);
+<% else %>
+	$("#calculation_calc_" + '<%= @block %>' + "_attributes_" +<%= @num %>+"_width").val('0');
+	$("#calculation_calc_" + '<%= @block %>' + "_attributes_" +<%= @num %>+"_length").val('0');
+
+	$("#calculation_calc_" + '<%= @block %>' + "_attributes_"+<%= @num %>+"_width").attr('readonly', true);
+	$("#calculation_calc_" + '<%= @block %>' + "_attributes_"+<%= @num %>+"_length").attr('readonly', true);
+<% end %>

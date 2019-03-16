@@ -1,9 +1,180 @@
-= form_for @calculation do |f|
-  - if @calculation.errors.any?
-    #error_explanation
-      h2 = "#{pluralize(@calculation.errors.count, "error")} prohibited this calculation from being saved:"
-      ul
-        - @calculation.errors.full_messages.each do |message|
-          li = message
+  = render 'layouts/errors', object: @calculation
+  
+  = form_for @calculation do |f|
+    .row.mt-5
+      .form-group.col-sm-6
+        = f.text_field :name, class: 'form-control form-control-sm', required: true
+        = f.label :name, 'Наименование', class: 'form-control-placeholder'
+      .form-group.col-sm-6
+        = f.label :calculation_category_ids, 'Категория калькуляции', class: 'small-label-placeholder'
+        = f.select :calculation_category_ids, @calculation_categories, { include_blank: '...' }, { class: 'form-control form-control-sm' }
 
-  .actions = f.submit
+    .row
+      .col-xs-9.col-md-10
+      .col-xs-1.col-md-1.d-flex
+        = button_tag '#', type: 'button', class: 'btn btn-outline-primary btn-sm collapse-all' do
+          i.fa.fa-compress.fa-rotate-45
+        = button_tag '#', type: 'button', class: 'btn btn-outline-primary btn-sm expand-all' do
+          i.fa.fa-expand.fa-rotate-45
+
+    .row.my-3
+      .col-xs-12.col-md-12
+        .accordion
+          .accordion-group
+            .accordion-heading.pl-2
+              = link_to "#positions", class: 'accordion-toggle', data: { toggle: "collapse" } do
+                span Участники
+                span = label_tag :positions_header_total, 'пусто', class: 'label-xs mb-0 row-sum text-danger header-total'
+            #positions.accordion-body.collapse.border-0
+              .accordion-inner.ml-0
+                table.table.table-xs.table-light.table-hover.positions_block_table
+                  thead.category-header
+                    tr.d-flex
+                      th.col-0 №
+                      th.col-3#add_position Участник
+                      th.col-1 Ед. изм.
+                      th.col-1 Ставка, р/час
+                      th.col-1 Время, час
+                      th.col-1 Коэфф-т
+                      th.col-3 Примечания
+                      th.col-1 Сумма, руб
+                      th.col-0
+                  tbody.positions_block_body
+                    = f.fields_for :calc_positions do |cp|
+                      tr.d-flex.body-row
+                        td.col-0.body-row-id = label_tag "calc_row_id[]", '1', class: 'label-xs mb-0'
+                        td.col-3 = cp.select :position_salary_id, @position_salaries, { include_blank: '...', selected: cp.object.position_salary_id }, class: 'form-control form-control-xs row-position-select', required: true
+                        td.text-muted.col-1 чел/час
+                        td.col-1 = cp.label :salary, '0.0', class: 'label-xs text-muted mb-0 row-salary'
+                        td.col-1 = cp.text_field :working_time, class: 'form-control form-control-xs row-working-time', required: true
+                        td.col-1 = cp.text_field :time_coeff, class: 'form-control form-control-xs row-time-coeff', required: true
+                        td.col-3 = cp.text_field :note, class: 'form-control form-control-xs row-note'
+                        td.col-1 = cp.label :rowsum, '0.0', class: 'label-xs mb-0 row-sum'
+                        td.col-0#del-btn
+                      = cp.hidden_field :_destroy, :class => 'row_delete_member'
+                  tfoot
+                    tr.d-flex
+                      td.col-0
+                      td.col-3
+                      td.col-1
+                      td.col-1
+                      td.col-1
+                      td.col-3
+                      td.col-1.pull-right.text-nowrap.label-xs ИТОГО, руб
+                      td.col-1.table-success = label_tag :positions_total, '0.00', class: 'label-xs mb-0'
+                      td.col-0.text-nowrap.add-btn
+                        = button_tag "+", id: 'add_row', class: 'btn btn-outline-primary btn-xs add-button', method: :get 
+                        = button_tag "коп", id: 'clone_row', class: "btn btn-outline-primary btn-xs add-button", method: :get
+    
+    .row.mt-3.mb-3
+      .col-xs-12.col-md-12
+        .accordion
+          .accordion-group
+            .accordion-heading.pl-2
+              = link_to "#inventories", class: 'accordion-toggle', data: { toggle: "collapse" } do
+                span Материалы
+                span = label_tag :inventories_header_total, 'пусто', class: 'label-xs mb-0 row-sum text-danger header-total'
+            #inventories.accordion-body.collapse.border-0
+              .accordion-inner.ml-0
+                table.table.table-xs.table-light.table-hover.inventories_block_table
+                  thead.category-header
+                    tr
+                      th №
+                      th#add_position Материал
+                      th Ед. изм.
+                      th Прайс, руб
+                      th Ширина, мм
+                      th Длина, мм
+                      th Площадь, м.кв
+                      th Кол-во
+                      th Примечания
+                      th Сумма, руб
+                      th
+                  tbody.inventories_block_body
+                    = f.fields_for :calc_inventories do |cp|
+                      tr.body-row
+                        td.body-row-id = label_tag "calc_row_id[]", '1', class: 'label-xs mb-0'
+                        td = cp.select :inventory_parameter_id, @inventory_parameters, { include_blank: '...', selected: cp.object.inventory_parameter_id }, class: 'form-control form-control-xs row-inventory-select', required: true
+                        td = cp.label :unit, '', class: 'label-xs text-muted mb-0 row-unit'
+                        td = cp.label :price, '0.0', class: 'label-xs text-muted mb-0 row-price'
+                        td = cp.text_field :width, class: 'form-control form-control-xs row-width'
+                        td = cp.text_field :length, class: 'form-control form-control-xs row-length'
+                        td = cp.label :square, '0.0', class: 'label-xs text-muted mb-0 row-square'
+                        td = cp.text_field :quantity, class: 'form-control form-control-xs row-quantity', required: true
+                        td = cp.text_field :note, class: 'form-control form-control-xs row-note'
+                        td = cp.label :rowsum, '0.0', class: 'label-xs mb-0 row-sum'
+                        td#del-btn
+                      = cp.hidden_field :_destroy, :class => 'row_delete_member'
+                  tfoot
+                    tr
+                      td
+                      td
+                      td
+                      td
+                      td
+                      td
+                      td
+                      td
+                      td.pull-right.text-nowrap.label-xs ИТОГО, руб
+                      td.table-success = label_tag :inventories_total, '0.00', class: 'label-xs mb-0'
+                      td.text-nowrap.add-btn
+                        = button_tag "+", id: 'add_row', class: 'btn btn-outline-primary btn-xs add-button', method: :get 
+                        = button_tag "коп", id: 'clone_row', class: "btn btn-outline-primary btn-xs add-button", method: :get
+    
+    .row.mt-3.mb-3
+      .col-xs-12.col-md-12
+        .accordion
+          .accordion-group
+            .accordion-heading.pl-2
+              = link_to "#equipments", class: 'accordion-toggle', data: { toggle: "collapse" } do
+                span Оборудование
+                span = label_tag :equipments_header_total, 'пусто', class: 'label-xs mb-0 row-sum text-danger header-total'
+            #equipments.accordion-body.collapse.border-0
+              .accordion-inner.ml-0
+                table.table.table-xs.table-light.table-hover.equipments_block_table
+                  thead.category-header
+                    tr
+                      th №
+                      th#add_position Оборудование
+                      th Сумма приобр., руб
+                      th Срок аморт., мес
+                      th Сумма аморт., р/час
+                      th Время исп., час
+                      th Примечания
+                      th Сумма, руб
+                      th
+                  tbody.equipments_block_body
+                    = f.fields_for :calc_equipments do |cp|
+                      tr.body-row
+                        td.body-row-id = label_tag "calc_row_id[]", '1', class: 'label-xs mb-0'
+                        td = cp.select :equipment_parameter_id, @equipment_parameters, { include_blank: '...', selected: cp.object.equipment_parameter_id }, class: 'form-control form-control-xs row-equipment-select', required: true
+                        td = cp.label :price, '', class: 'label-xs text-muted mb-0 row-price'
+                        td = cp.label :lifetime, '0.0', class: 'label-xs text-muted mb-0 row-lifetime'
+                        td = cp.label :rate, '0.0', class: 'label-xs text-muted mb-0 row-rate'
+                        td = cp.text_field :usage_time, class: 'form-control form-control-xs row-usage-time', required: true
+                        td = cp.text_field :note, class: 'form-control form-control-xs row-note'
+                        td = cp.label :rowsum, '0.0', class: 'label-xs mb-0 row-sum'
+                        td#del-btn
+                      = cp.hidden_field :_destroy, :class => 'row_delete_member'
+                  tfoot
+                    tr
+                      td
+                      td
+                      td
+                      td
+                      td
+                      td
+                      td.pull-right.text-nowrap.label-xs ИТОГО, руб
+                      td.table-success = label_tag :equipments_total, '0.00', class: 'label-xs mb-0'
+                      td.text-nowrap.add-btn
+                        = button_tag "+", id: 'add_row', class: 'btn btn-outline-primary btn-xs add-button', method: :get 
+                        = button_tag "коп", id: 'clone_row', class: "btn btn-outline-primary btn-xs add-button", method: :get
+    .row.mt-3.mb-3
+      .col-xs-12.col-md-12.text-right.label-xs
+        | Прямые затраты, руб: 
+        span.text-white.bg-success.p-1
+          = f.label :price, '0.0', class: 'label-xs mb-0 calc-sum'
+        = f.hidden_field :price, value: '0.0'
+    hr
+    .row.justify-content-center.mt-3.mb-3
+      = f.submit 'Сохранить', class: "btn btn-primary btn-sm"

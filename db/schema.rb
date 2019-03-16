@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_08_150116) do
+ActiveRecord::Schema.define(version: 2019_03_16_092329) do
 
   create_table "accountant_preferences", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.decimal "income_tax_percent", precision: 5, scale: 2, default: "0.0", null: false
@@ -22,6 +22,52 @@ ActiveRecord::Schema.define(version: 2019_02_08_150116) do
     t.boolean "actual", default: true, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "calc_equipments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "calculation_id"
+    t.bigint "equipment_parameter_id"
+    t.decimal "usage_time", precision: 6, scale: 2, default: "0.0", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "note", default: ""
+    t.index ["calculation_id"], name: "index_calc_equipments_on_calculation_id"
+    t.index ["equipment_parameter_id"], name: "index_calc_equipments_on_equipment_parameter_id"
+  end
+
+  create_table "calc_inventories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "calculation_id"
+    t.bigint "inventory_parameter_id"
+    t.decimal "quantity", precision: 12, scale: 6, default: "0.0", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "note", default: ""
+    t.integer "width", default: 0, null: false
+    t.integer "length", default: 0, null: false
+    t.index ["calculation_id"], name: "index_calc_inventories_on_calculation_id"
+    t.index ["inventory_parameter_id"], name: "index_calc_inventories_on_inventory_parameter_id"
+  end
+
+  create_table "calc_percents", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "calculation_category_id"
+    t.decimal "manager_percent", precision: 5, scale: 2, default: "0.0", null: false
+    t.decimal "profit_percent", precision: 5, scale: 2, default: "0.0", null: false
+    t.decimal "overheads_percent", precision: 5, scale: 2, default: "0.0", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["calculation_category_id"], name: "index_calc_percents_on_calculation_category_id"
+  end
+
+  create_table "calc_positions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "calculation_id"
+    t.bigint "position_salary_id"
+    t.decimal "working_time", precision: 6, scale: 4, default: "0.0", null: false
+    t.decimal "time_coeff", precision: 5, scale: 4, default: "0.0", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "note", default: ""
+    t.index ["calculation_id"], name: "index_calc_positions_on_calculation_id"
+    t.index ["position_salary_id"], name: "index_calc_positions_on_position_salary_id"
   end
 
   create_table "calculation_categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -46,7 +92,7 @@ ActiveRecord::Schema.define(version: 2019_02_08_150116) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "name", default: "", null: false
-    t.decimal "price", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "price", precision: 12, scale: 4, default: "0.0", null: false
     t.boolean "deleted", default: false, null: false
   end
 

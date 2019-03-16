@@ -1,8 +1,10 @@
-h1 Editing calculation
+h3.text-center.mt-5 Редактирование калькуляции
 
-== render 'form'
+.row.mb-2.pl-3
+  = link_to 'Новая калькуляция', new_calculation_path
 
-=> link_to 'Show', @calculation
-'|
-=< link_to 'Back', calculations_path
+= render 'form'
+
+.row.mb-5.pl-3
+  = link_to 'Список калькуляций', calculation_categories_path
 

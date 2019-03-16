@@ -1,4 +1,5 @@
 class Position < ApplicationRecord
+  has_many :calc_position
   has_many :position_salaries
   accepts_nested_attributes_for :position_salaries
 

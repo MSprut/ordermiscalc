@@ -10,7 +10,7 @@ module CalculationCategoriesHelper
           concat tag.span "кальк: #{category.calculations.count}", class: 'badge badge-warning inventories-count'
         end) +
         (tag.div class: 'category-action pull-right' do
-          (link_to edit_calculation_category_path(category) do
+          (link_to edit_calculation_category_path(category), target: :_blank do
             (tag.i 'edit', class: "material-icons").html_safe
           end) +
           (link_to category, data: { confirm: 'Вы уверены?' }, method: :delete do
@@ -35,9 +35,9 @@ module CalculationCategoriesHelper
                 category.calculations.order(name: :asc).each do |calc|
                   concat (content_tag :tr, class: 'd-flex' do
                     concat content_tag :td, calc.name, class: 'col-8'
-                    concat content_tag :td, calc.price, class: 'col-2'
+                    concat content_tag :td, '%.4f' % calc.price, class: 'col-2'
                     concat (content_tag :td, class: 'col-1' do
-                      (link_to edit_calculation_path(calc) do
+                      (link_to edit_calculation_path(calc), target: :_blank do
                         content_tag(:i, 'edit', class: "material-icons").html_safe
                       end) +
                       (link_to calc, data: { confirm: 'Вы уверены?' }, method: :delete do

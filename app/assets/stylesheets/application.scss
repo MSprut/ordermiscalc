@@ -22,6 +22,7 @@
 @import "accountant_preferences";
 @import "inventory_categories";
 @import "calculation_categories";
+@import "calculations";
 //@import "materialize";
 
 .small-label {
@@ -171,4 +172,32 @@ select.form-control option {
     -ms-transform: rotate(315deg);
     -o-transform: rotate(315deg);
     transform: rotate(315deg);
+}
+
+.form-control-xs {
+  height: calc(1.5rem + 2px);
+  padding: 0 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  border-radius: 0.2rem;
+}
+
+.btn-xs {
+  padding: 0 5px;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  border-radius: 0.2rem;
+}
+
+.table-xs th, .table-xs td {
+    padding: 0.2rem;
+}
+
+.label-xs {
+  font-size: 14px;
+}
+
+.col-0 {
+  flex: 0 0 3%;
+  max-width: 3%;
 }

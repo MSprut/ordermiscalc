@@ -9,7 +9,11 @@ Rails.application.routes.draw do
   resources :positions
   get 'static_pages/home'
   get 'static_pages/help'
-  resources :calculations
+  resources :calculations do
+    collection do
+      get 'get_unit_and_price', to: "calculations#get_unit_and_price"
+    end
+  end
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root 'static_pages#home' #'calculations#index'
 
