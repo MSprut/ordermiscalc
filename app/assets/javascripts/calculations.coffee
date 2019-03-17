@@ -287,9 +287,8 @@ $(document).on 'turbolinks:load', ->
 
   #Фильтрует недопустимые символы в полях ввода при вводе цифр
   $('input').keypress (event) ->
-    if event.target.id != "calculation_name" and !event.target.classList.contains('row-note')# and
-      #event.target.id != "adv_position_name" and event.target.id != "adv_material_name" and
-      #event.target.id != "adv_position_salary" and
+    if event.target.id != "calculation_name" and !event.target.classList.contains('row-note') and
+        event.target.id != "calculation_category_name" #and
       #event.target.id != "adv_equipment_name" and event.target.id != "adv_equipment_price" and
       #event.target.id != "adv_equipment_lifetime" and event.target.id != "adv_equipment_power" and
       #event.target.id != "adv_module_name"
