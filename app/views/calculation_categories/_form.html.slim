@@ -8,6 +8,27 @@
       .form-group.col-sm-6
         = f.label :parent_id, 'Родительская категория', class: 'small-label-placeholder'
         = f.select :parent_id, @calculation_categories, { include_blank: '...' }, { class: 'form-control form-control-sm' }
+    .row.mt-5
+      table.table.table-sm.table-striped.table-light.table-hover.mb-4
+        thead.bg-secondary.text-white.small
+          tr.d-flex
+            th.col-6 Категория потребителей
+            th.col-2 Сбыт, %
+            th.col-2 Накладные, %
+            th.col-2 Прибыль, %
+
+        tbody
+          = f.fields_for :calc_percents, @calculation_category.calc_percents  do |cp|
+            tr.d-flex
+              td.col-6
+                = cp.object.customer_category_parameter.customer_category.name
+                = cp.hidden_field :customer_category_parameter_id
+              td.col-2
+                = cp.text_field :manager_percent, class: 'form-control form-control-xs', required: true
+              td.col-2
+                = cp.text_field :overheads_percent, class: 'form-control form-control-xs', required: true
+              td.col-2
+                = cp.text_field :profit_percent, class: 'form-control form-control-xs', required: true
 
     hr
     .row.justify-content-center.mt-3.mb-3

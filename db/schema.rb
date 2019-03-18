@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_16_092329) do
+ActiveRecord::Schema.define(version: 2019_03_17_221315) do
 
   create_table "accountant_preferences", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.decimal "income_tax_percent", precision: 5, scale: 2, default: "0.0", null: false
@@ -55,7 +55,9 @@ ActiveRecord::Schema.define(version: 2019_03_16_092329) do
     t.decimal "overheads_percent", precision: 5, scale: 2, default: "0.0", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "customer_category_parameter_id"
     t.index ["calculation_category_id"], name: "index_calc_percents_on_calculation_category_id"
+    t.index ["customer_category_parameter_id"], name: "index_calc_percents_on_customer_category_parameter_id"
   end
 
   create_table "calc_positions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -199,6 +201,7 @@ ActiveRecord::Schema.define(version: 2019_03_16_092329) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  add_foreign_key "calc_percents", "customer_category_parameters"
   add_foreign_key "inventory_categories_inventories", "inventories"
   add_foreign_key "inventory_categories_inventories", "inventory_categories"
   add_foreign_key "position_salaries", "accountant_preferences"

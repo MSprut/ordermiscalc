@@ -5,6 +5,7 @@ class CustomerCategoryParameter < ApplicationRecord
   validates :overheads_percent, presence: true
 
   scope :set_relevant, -> { last.update_column(:actual, true) }
+  scope :get_actual, -> { where(actual: true) }
 
   def self.get_last(customer_category_id, number)
     joins(:customer_category).where(customer_category_id: customer_category_id).order(created_at: :desc).limit(number)

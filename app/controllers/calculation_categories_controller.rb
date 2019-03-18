@@ -16,20 +16,13 @@ class CalculationCategoriesController < ApplicationController
   def new
     @calculation_category = CalculationCategory.new
     @calculation_categories = collection_for_parent_select
-    #@calculations = Calculation.joins(:calculation_categories_calculations)
-    #  .where(calculation_categories_calculations: {calculation_id: nil})
-    #  .where(deleted: false)
-    #  .order(name: :asc)
-    #  .map { |u| [ u.name, u.id ] }
+    build_customer_category_associations
   end
 
   # GET /calculation_categories/1/edit
   def edit
     @calculation_categories = collection_for_parent_select
-    #@calculations = Calculation.includes(:calculation_categories_calculations)
-    #  .where(deleted: false)
-    #  .order(name: :asc)
-    #  .map { |u| [ u.name, u.id ] }
+    build_customer_category_associations
   end
 
   # POST /calculation_categories
@@ -88,7 +81,9 @@ class CalculationCategoriesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def calculation_category_params
-      params.require(:calculation_category).permit(:name, :parent_id, calculation_ids: [])
+      params.require(:calculation_category).permit(:name, :parent_id, calculation_ids: [],
+        calc_percents_attributes: [:id, :calculation_category_id, :customer_category_parameter_id,
+        :manager_percent, :profit_percent, :overheads_percent])
     end
 
     def collection_for_parent_select
@@ -102,5 +97,18 @@ class CalculationCategoriesController < ApplicationController
         result += ancestry_options(sub_items) unless sub_items.blank?
       end
       result
+    end
+
+    def build_customer_category_associations
+      customers_categories = CustomerCategory.where(deleted: false).all
+        customers_categories.each do |cc|
+          customer_params = cc.customer_category_parameters.get_actual.map { |r| r.attributes.symbolize_keys }
+          customer_params = customer_params.first
+          @calculation_category.calc_percents.build(
+            customer_category_parameter_id: customer_params[:id],
+            manager_percent: customer_params[:manager_percent],
+            profit_percent: customer_params[:profit_percent],
+            overheads_percent: customer_params[:overheads_percent]) unless @calculation_category.calc_percents.collect(&:customer_category_parameter_id).include?(customer_params[:id])
+      end
     end
 end
