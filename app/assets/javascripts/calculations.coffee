@@ -139,15 +139,16 @@ $(document).on 'turbolinks:load', ->
 
   #----- ROW SUM RECALCULATION ON KEY PRESS
   $('input, textarea').keyup (event) ->
-    if event.target.id != "calculation_name" and !event.target.classList.contains('row-note')# and
-      #event.target.title != 'note[]' and event.target.id != "adv_position_name" and
-      #event.target.id != "adv_position_salary" and event.target.id != "adv_equipment_lifetime" and
-      #event.target.id != "adv_equipment_name" and event.target.id != "adv_equipment_price" and
-      #event.target.id != "adv_equipment_power" and event.target.id != "adv_material_name" and
-      #event.target.id != "adv_material_price" and
-      #event.target.id != "adv_module_name"
-      #calcSingleRowSum @
-      #CalcTotal()
+    if event.target.id != "calculation_name" and !event.target.classList.contains('row-note') and
+        !event.target.classList.contains('competitor-price')
+        #event.target.title != 'note[]' and event.target.id != "adv_position_name" and
+        #event.target.id != "adv_position_salary" and event.target.id != "adv_equipment_lifetime" and
+        #event.target.id != "adv_equipment_name" and event.target.id != "adv_equipment_price" and
+        #event.target.id != "adv_equipment_power" and event.target.id != "adv_material_name" and
+        #event.target.id != "adv_material_price" and
+        #event.target.id != "adv_module_name"
+        #calcSingleRowSum @
+        #CalcTotal()
       ajax_requests.push(calcSingleRowSum @)
       $.when.apply($, ajax_requests).done ->
         CalcTotal()
@@ -308,7 +309,7 @@ $(document).on 'turbolinks:load', ->
           $.when.apply($, ajax_requests).done ->
             calcSingleRowSum obj
             CalcTotal()
-            getCustomersPrices()
+        getCustomersPrices()
 
   #Фильтрует недопустимые символы в полях ввода при вводе цифр
   $('input').keypress (event) ->
