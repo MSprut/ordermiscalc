@@ -3,7 +3,7 @@
 <%# logger.debug('PRICE: '+@price.to_s) %>
 <%# logger.debug('UNIT_NAME: '+@unit.to_s) %>
 <%# logger.debug('ARRAY: '+@prices.inspect) %>
-var prices = <%= raw @prices %>
+var prices = <%= @prices %>
 
 $('label[class*="customer-price"]').each(function (index, element) {
   $(element).text(prices[index].toFixed(4));
