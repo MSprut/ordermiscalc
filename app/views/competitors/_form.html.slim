@@ -1,0 +1,10 @@
+  = render 'layouts/errors', object: @competitor
+  
+  = form_for @competitor do |f|
+    .row.mt-5
+      .form-group.col-sm-6
+        = f.text_field :name, class: 'form-control form-control-sm', required: true
+        = f.label :name, 'Наименование', class: 'form-control-placeholder'
+    hr
+    .row.justify-content-center.mt-3.mb-3
+      = f.submit 'Сохранить', class: "btn btn-primary btn-sm"

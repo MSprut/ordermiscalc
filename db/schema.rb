@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_17_221315) do
+ActiveRecord::Schema.define(version: 2019_03_19_202829) do
 
   create_table "accountant_preferences", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.decimal "income_tax_percent", precision: 5, scale: 2, default: "0.0", null: false
@@ -22,6 +22,16 @@ ActiveRecord::Schema.define(version: 2019_03_17_221315) do
     t.boolean "actual", default: true, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "calc_competitors", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "calculation_id"
+    t.bigint "competitor_id"
+    t.decimal "price", precision: 12, scale: 4, default: "0.0", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["calculation_id"], name: "index_calc_competitors_on_calculation_id"
+    t.index ["competitor_id"], name: "index_calc_competitors_on_competitor_id"
   end
 
   create_table "calc_equipments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -72,6 +82,16 @@ ActiveRecord::Schema.define(version: 2019_03_17_221315) do
     t.index ["position_salary_id"], name: "index_calc_positions_on_position_salary_id"
   end
 
+  create_table "calc_prices", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "calculation_id"
+    t.bigint "customer_category_id"
+    t.decimal "price", precision: 12, scale: 4, default: "0.0", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["calculation_id"], name: "index_calc_prices_on_calculation_id"
+    t.index ["customer_category_id"], name: "index_calc_prices_on_customer_category_id"
+  end
+
   create_table "calculation_categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", default: "", null: false
     t.string "ancestry"
@@ -96,6 +116,13 @@ ActiveRecord::Schema.define(version: 2019_03_17_221315) do
     t.string "name", default: "", null: false
     t.decimal "price", precision: 12, scale: 4, default: "0.0", null: false
     t.boolean "deleted", default: false, null: false
+  end
+
+  create_table "competitors", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name", default: "", null: false
+    t.boolean "deleted", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "customer_categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|

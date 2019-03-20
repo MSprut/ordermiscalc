@@ -11,9 +11,6 @@ $(document).on 'turbolinks:load', ->
   counter['amortizations'] = 1
   ajax_requests = []
 
-  $ ->
-    $('.selectpicker').selectpicker 'render'
-
   window.getBlockPrefix = (obj, is_table) ->
     is_table = is_table || false
     if is_table == true
@@ -44,6 +41,24 @@ $(document).on 'turbolinks:load', ->
         block: prefix,
         selection: selection,
         num: num
+
+  window.getCustomersPrices = ->
+    calc_id = $('.calculation-id').val()
+    cost = $('.direct-cost').val()
+    ids = []
+    $('.customer-category-id').each (index) ->
+      ids.push $(this).val()
+      #return
+
+    return $.ajax
+      url: "/calculations/get_customers_prices"
+      type: "GET"
+      dataType: "script"
+      data:
+        id: calc_id,
+        direct_cost: cost,
+        customer_categry_ids: ids
+
 
   window.calcSingleRowSum = (obj) ->
     if $("#clone_main_show").length == 0
@@ -119,6 +134,7 @@ $(document).on 'turbolinks:load', ->
             $("label[for='" + prefix + "_header_total']").text(block_total.toFixed(4) + CURRENCY)
           else
             $("label[for='" + prefix + "_header_total']").text 'пусто'
+    #getCustomersPrices()
 
 
   #----- ROW SUM RECALCULATION ON KEY PRESS
@@ -130,8 +146,12 @@ $(document).on 'turbolinks:load', ->
       #event.target.id != "adv_equipment_power" and event.target.id != "adv_material_name" and
       #event.target.id != "adv_material_price" and
       #event.target.id != "adv_module_name"
-      calcSingleRowSum @
-      CalcTotal()
+      #calcSingleRowSum @
+      #CalcTotal()
+      ajax_requests.push(calcSingleRowSum @)
+      $.when.apply($, ajax_requests).done ->
+        CalcTotal()
+      getCustomersPrices()
 
   #----- GET UNIT AND PRICE FOR MATERIALS OR SERVICES
   window.onchangeMaterial = (obj) ->
@@ -139,6 +159,7 @@ $(document).on 'turbolinks:load', ->
     $.when.apply($, ajax_requests).done ->
       calcSingleRowSum obj
       CalcTotal()
+    getCustomersPrices()
 
   $("select[id$='_position_salary_id'], select[id$='_inventory_parameter_id'], select[id$='_equipment_parameter_id']").change (event) ->
     obj = $(this)
@@ -147,6 +168,7 @@ $(document).on 'turbolinks:load', ->
     $.when.apply($, ajax_requests).done ->
       calcSingleRowSum(obj)
       CalcTotal()
+    getCustomersPrices()
 
     #----- CLONE SELECT VALUE FROM ORIGINAL TO CLONE
   window.cloneSelectValue = (original, clone, prefix) ->
@@ -218,7 +240,8 @@ $(document).on 'turbolinks:load', ->
     $(@).closest('tr').find('select, input, a').attr 'disabled', true #set object attr 'disabled' to true
     $(@).closest('tr').find('label').css 'color', '#d0d0d0' #set label color to 'disabled' value
     $('input[class=\'row_delete_member\']', master).eq(row_number - 1).attr 'value', 1 #set attribute :_destroy to "1"
-    CalcTotal() 
+    CalcTotal()
+    getCustomersPrices()
   #---------------------------------------------------------------------------------------
 
   #----- ADD ROW TO BODY OF ORDER BLOCK
@@ -256,6 +279,7 @@ $(document).on 'turbolinks:load', ->
     body.append clone #append clone
     #body.find('.row_material_selection:last').combobox() #create combobox for cloned select
     CalcTotal()
+    getCustomersPrices()
     return
     #--------------------- END ADD/CLONE
 
@@ -284,6 +308,7 @@ $(document).on 'turbolinks:load', ->
           $.when.apply($, ajax_requests).done ->
             calcSingleRowSum obj
             CalcTotal()
+            getCustomersPrices()
 
   #Фильтрует недопустимые символы в полях ввода при вводе цифр
   $('input').keypress (event) ->
@@ -294,7 +319,8 @@ $(document).on 'turbolinks:load', ->
         event.target.id != "position_name" and
         event.target.id != "equipment_name" and
         event.target.id != "unit_name" and
-        event.target.id != "customer_category_name"
+        event.target.id != "customer_category_name" and
+        event.target.id != "competitor_name"
 
       if event.which != 8 and event.which != 0 and (event.which < 48 or event.which > 57)
         if event.target.classList.contains('row-note') and #and event.target.title != 'note[]'

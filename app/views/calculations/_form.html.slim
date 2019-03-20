@@ -1,6 +1,7 @@
   = render 'layouts/errors', object: @calculation
   
   = form_for @calculation do |f|
+    = hidden_field_tag :calc_id, @calculation.id, class: 'calculation-id'
     .row.mt-5
       .form-group.col-sm-6
         = f.text_field :name, class: 'form-control form-control-sm', required: true
@@ -174,7 +175,41 @@
         | Прямые затраты, руб: 
         span.text-white.bg-success.p-1
           = f.label :price, '0.0', class: 'label-xs mb-0 calc-sum'
-        = f.hidden_field :price, value: '0.0'
+        = f.hidden_field :price, value: '0.0', class: 'direct-cost'
+
+    .row.mt-3.mb-3
+      .col-xs-6.col-md-6
+        table.table.table-sm.table-striped.table-light.table-hover.mb-4
+          thead.bg-secondary.text-white.small
+            tr.d-flex
+              th.col-10 Конкурент
+              th.col-2 Ст-ть, руб
+          tbody
+            = f.fields_for :calc_competitors, @calculation.calc_competitors  do |cc|
+              tr.d-flex
+                td.col-10
+                  = cc.object.competitor.name
+                  = cc.hidden_field :competitor_id
+                td.col-2
+                  = cc.text_field :price, class: 'form-control form-control-xs'
+
+      .col-xs-6.col-md-6
+        table.table.table-sm.table-striped.table-light.table-hover.mb-4
+          thead.bg-secondary.text-white.small
+            tr.d-flex
+              th.col-10 Категория потребителей
+              th.col-2 Ст-ть, руб
+          tbody
+            = f.fields_for :calc_prices, @calculation.calc_prices  do |cp|
+              tr.d-flex.align-items-center
+                td.col-10
+                  = cp.object.customer_category.name
+                  = cp.hidden_field :customer_category_id, class: 'customer-category-id'
+                td.col-2.text-right
+                  span.d-block.bg-warning.w-100.pr-1
+                    = cp.label :price, value: '0.0', class: 'label-xs mb-0 customer-price'
+                    = cp.hidden_field :price
+
     hr
     .row.justify-content-center.mt-3.mb-3
       = f.submit 'Сохранить', class: "btn btn-primary btn-sm"

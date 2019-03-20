@@ -1,0 +1,20 @@
+h3.text-center.mt-5 Список конкурентов
+
+.row.mb-2.pl-3
+  = link_to 'Новый конкурент', new_competitor_path
+
+table.table.table-sm.table-striped.table-light.table-hover.mb-4
+  thead.bg-secondary.text-white.small
+    tr
+      th Наименование
+      th Действия
+
+  tbody
+    - @competitors.each do |c|
+      tr
+        td = c.name
+        td
+          = link_to edit_competitor_path(c) do
+            == material_icon.edit
+          = link_to c, data: { confirm: 'Вы уверены?' }, method: :delete do
+            == material_icon.delete_outline.css_class('text-danger ml-2')

@@ -22,4 +22,10 @@ class Calculation < ApplicationRecord
 
   has_many :calculation_categories_calculations, :dependent => :destroy
   has_many :calculation_categories, through: :calculation_categories_calculations
+
+  has_many :calc_prices
+  accepts_nested_attributes_for :calc_prices
+
+  has_many :calc_competitors
+  accepts_nested_attributes_for :calc_competitors
 end

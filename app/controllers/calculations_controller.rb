@@ -1,7 +1,7 @@
 class CalculationsController < ApplicationController
   include PositionsHelper
 
-  before_action :set_calculation, only: [:show, :edit, :update, :destroy, :restore]
+  before_action :set_calculation, only: [:show, :edit, :update, :destroy, :restore, :get_customers_prices]
 
   # GET /calculations
   # GET /calculations.json
@@ -18,6 +18,8 @@ class CalculationsController < ApplicationController
   def new
     @calculation = Calculation.new
     create_nested_attributes
+    build_price_associations
+    build_competitor_associations
     preload_nested_params
   end
 
@@ -25,6 +27,8 @@ class CalculationsController < ApplicationController
   def edit
     @calculation = Calculation.find(params[:id])
     create_nested_attributes
+    build_price_associations
+    build_competitor_associations
     preload_nested_params
   end
 
@@ -120,6 +124,14 @@ class CalculationsController < ApplicationController
     end
   end
 
+  def get_customers_prices
+    calculate_customers_prices
+    respond_to do |f|
+      f.js { render layout: false, content_type: 'text/javascript' }
+      f.html
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_calculation
@@ -131,7 +143,9 @@ class CalculationsController < ApplicationController
       params.require(:calculation).permit(:name, :price, #:calculation_category_ids,
         calc_positions_attributes: [:id, :calculation_id, :position_salary_id, :working_time, :time_coeff, :note, :_destroy],
         calc_inventories_attributes: [:id, :calculation_id, :inventory_parameter_id, :width, :length, :quantity, :note, :_destroy],
-        calc_equipments_attributes: [:id, :calculation_id, :equipment_parameter_id, :usage_time, :note, :_destroy])
+        calc_equipments_attributes: [:id, :calculation_id, :equipment_parameter_id, :usage_time, :note, :_destroy],
+        calc_prices_attributes: [:id, :calculation_id, :customer_category_id, :price],
+        calc_competitors_attributes: [:id, :calculation_id, :competitor_id, :price])
     end
 
     def category_params
@@ -163,5 +177,39 @@ class CalculationsController < ApplicationController
       @calculation.calc_positions.build if @calculation.calc_positions.blank?
       @calculation.calc_inventories.build if @calculation.calc_inventories.blank?
       @calculation.calc_equipments.build if @calculation.calc_equipments.blank?
+    end
+
+    def build_price_associations
+      customers_categories = CustomerCategory.where(deleted: false).all
+        customers_categories.each do |cc|
+          #customer_params = cc.map { |r| r.attributes.symbolize_keys }
+          #customer_params = customer_params.first
+          @calculation.calc_prices.build(
+            customer_category_id: cc.id) unless @calculation.calc_prices.collect(&:customer_category_id).include?(cc.id)
+      end
+    end
+
+    def build_competitor_associations
+      competitors = Competitor.where(deleted: false).all
+        competitors.each do |c|
+          @calculation.calc_competitors.build(
+            competitor_id: c.id) unless @calculation.calc_competitors.collect(&:competitor_id).include?(c.id)
+      end
+    end
+
+    def calculate_customers_prices
+      @prices = []
+      tax_pref = AccountantPreference.where(actual: true).first.tax_percent.to_f
+      @calculation.calculation_categories.first.calc_percents.each do |cp|
+        direct = params[:direct_cost].to_f
+        overheads = direct * (cp.overheads_percent / 100.0)
+        manager = (direct + overheads) * (cp.manager_percent / 100.0)
+        costs = direct + overheads + manager
+        profit = costs * (cp.profit_percent / 100.0)
+        price_not_tax = costs + profit
+        tax = price_not_tax  * (tax_pref / 100.0)
+        price = price_not_tax + tax
+        @prices << price
+      end
     end
 end

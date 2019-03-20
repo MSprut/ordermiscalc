@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :competitors
   resources :calculation_categories
   resources :customer_categories
   resources :inventory_categories
@@ -12,6 +13,7 @@ Rails.application.routes.draw do
   resources :calculations do
     collection do
       get 'get_unit_and_price', to: "calculations#get_unit_and_price"
+      get 'get_customers_prices', to: "calculations#get_customers_prices"
       delete "restore/:id" => "calculations#restore", as: :restore
     end
   end
