@@ -309,7 +309,8 @@ $(document).on 'turbolinks:load', ->
           $.when.apply($, ajax_requests).done ->
             calcSingleRowSum obj
             CalcTotal()
-        getCustomersPrices()
+        $.when.apply($, ajax_requests).done ->
+          getCustomersPrices()
 
   #Фильтрует недопустимые символы в полях ввода при вводе цифр
   $('input').keypress (event) ->

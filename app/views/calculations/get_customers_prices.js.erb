@@ -5,7 +5,6 @@
 <%# logger.debug('ARRAY: '+@prices.inspect) %>
 var prices = <%= @prices %>
 
-$('label[class*="customer-price"]').each(function (index, element) {
-  $(element).text(prices[index].toFixed(4));
-  $(element).siblings('input').val(prices[index].toFixed(4));
+$('input[class*="customer-price"]').each(function (index, element) {
+  $(element).val(prices[index].toFixed(4));
 });

@@ -197,18 +197,16 @@
         table.table.table-sm.table-striped.table-light.table-hover.mb-4
           thead.bg-secondary.text-white.small
             tr.d-flex
-              th.col-10 Категория потребителей
-              th.col-2 Ст-ть, руб
+              th.col-9 Категория потребителей
+              th.col-3 Ст-ть, руб
           tbody
             = f.fields_for :calc_prices, @calculation.calc_prices  do |cp|
               tr.d-flex.align-items-center
-                td.col-10
+                td.col-9
                   = cp.object.customer_category.name
                   = cp.hidden_field :customer_category_id, class: 'customer-category-id'
-                td.col-2.text-right
-                  span.d-block.bg-warning.w-100.pr-1
-                    = cp.label :price, value: '0.0', class: 'label-xs mb-0 customer-price'
-                    = cp.hidden_field :price
+                td.col-3
+                  = cp.text_field :price, value: '0.0', class: 'form-control form-control-xs customer-price border-0 bg-warning text-right'
 
     hr
     .row.justify-content-center.mt-3.mb-3
