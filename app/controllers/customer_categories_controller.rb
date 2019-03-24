@@ -1,10 +1,11 @@
 class CustomerCategoriesController < ApplicationController
-  before_action :set_customer_category, only: [:show, :edit, :update, :destroy]
+  before_action :set_customer_category, only: [:show, :edit, :update, :destroy, :restore]
 
   # GET /customer_categories
   # GET /customer_categories.json
   def index
     @customer_categories = CustomerCategory.where(deleted: false).order(name: :asc)
+    @removed_customer_categories = CustomerCategory.where(deleted: true)
   end
 
   # GET /customer_categories/1
@@ -66,6 +67,15 @@ class CustomerCategoriesController < ApplicationController
       CustomerCategoryParameter.set_irrelevant(@customer_category.id)
       flash[:success] = 'Категория успешно удалено.'
       format.html { redirect_to customer_categories_path }
+    end
+  end
+
+  def restore
+    @customer_category.update_column(:deleted, false)
+    respond_to do |format|
+      flash[:success] = 'Категория успешно восстановлена.'
+      format.html { redirect_to customer_categories_path }
+      format.json { head :no_content }
     end
   end
 
