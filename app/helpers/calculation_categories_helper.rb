@@ -25,15 +25,14 @@ module CalculationCategoriesHelper
             concat (content_tag :table, nil, class: 'table table-striped table-sm table-light table-hover' do
               (content_tag :thead, nil, class: 'category-header' do
                 concat (content_tag :tr, class: 'd-flex' do
-                  concat content_tag :th, 'Наименование', class: 'col-6'
-                  #concat content_tag :th, 'Ст-ть, руб', class: 'col-2'
-                  category.calculations.not_deleted.order(name: :asc).each do |calc|
-                    calc.calc_prices.each do |cp|
-                      concat content_tag :th, cp.customer_category.name, class: 'col-1'
+                  @cust_cat_count = CustomerCategory.not_deleted.count
+                  @compet_count = Competitor.not_deleted.count
+                  concat content_tag :th, 'Наименование', class: "col-#{11-@cust_cat_count-@compet_count}"
+                  CustomerCategory.not_deleted.each do |cc|
+                    concat content_tag :th, cc.name, class: 'col-1'
                     end
-                    calc.calc_competitors.each do |cc|
-                      concat content_tag :th, cc.competitor.name, class: 'col-1'
-                    end
+                  Competitor.not_deleted.each do |cc|
+                    concat content_tag :th, cc.name, class: 'col-1'
                   end
                   concat content_tag :th, 'Действия', class: 'col-1'
                 end)
@@ -42,13 +41,25 @@ module CalculationCategoriesHelper
               (content_tag :tbody do
                 category.calculations.not_deleted.order(name: :asc).each do |calc|
                   concat (content_tag :tr, class: 'd-flex' do
-                    concat content_tag :td, calc.name, class: 'col-6'
+                    concat content_tag :td, calc.name, class: "col-#{11-@cust_cat_count-@compet_count}"
                     #concat content_tag :td, '%.4f' % calc.price, class: 'col-2'
-                    calc.calc_prices.each do |cp|
-                      concat content_tag :td, '%.2f' % cp.price, class: 'col-1 label-xs'
+                    if calc.calc_prices.present?
+                      calc.calc_prices.each do |cp|
+                        concat content_tag :td, '%.2f' % cp.price, class: 'col-1 label-xs'
+                      end
+                    else
+                      @cust_cat_count.times do
+                        concat content_tag :td, '-', class: 'col-1 label-xs'
+                      end
                     end
-                    calc.calc_competitors.each do |cc|
-                      concat content_tag :td, '%.2f' % cc.price, class: 'col-1 label-xs'
+                    if calc.calc_competitors.present?
+                      calc.calc_competitors.each do |cc|
+                        concat content_tag :td, '%.2f' % cc.price, class: 'col-1 label-xs'
+                      end
+                    else
+                      @compet_count.times do
+                        concat content_tag :td, '-', class: 'col-1 label-xs'
+                      end
                     end
                     concat (content_tag :td, class: 'col-1' do
                       (link_to edit_calculation_path(calc), target: :_blank do

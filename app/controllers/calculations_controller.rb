@@ -57,14 +57,27 @@ class CalculationsController < ApplicationController
     preload_nested_params
 
     respond_to do |format|
-      if @calculation.update(calculation_params)
-        flash[:success] = 'Калькуляция успешно отредактирована.'
-        format.html { redirect_to edit_calculation_path(@calculation) }
-        format.json { render :show, status: :ok, location: @calculation }
+      if params[:commit] == 'Сохранить как'
+        calc = Calculation.new(calculation_create_params)
+        if calc.save
+          if calc.update_attributes(category_params)
+            flash[:success] = 'Калькуляция успешно создана.'
+            format.html { redirect_to edit_calculation_path(calc) }
+          end
+        else
+          flash[:danger] = 'Ошибка создания калькуляции.'
+          format.html { render :new }
+        end
       else
-        flash[:danger] = 'Ошибка редактирования калькуляции.'
-        format.html { render :edit }
-        format.json { render json: @calculation.errors.full_messages, status: :unprocessable_entity }
+        if @calculation.update(calculation_params)
+          flash[:success] = 'Калькуляция успешно отредактирована.'
+          format.html { redirect_to edit_calculation_path(@calculation) }
+          format.json { render :show, status: :ok, location: @calculation }
+        else
+          flash[:danger] = 'Ошибка редактирования калькуляции.'
+          format.html { render :edit }
+          format.json { render json: @calculation.errors.full_messages, status: :unprocessable_entity }
+        end
       end
     end
   end
@@ -140,7 +153,7 @@ class CalculationsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def calculation_params
-      params.require(:calculation).permit(:name, :price, #:calculation_category_ids,
+      params.require(:calculation).permit(:name, :price, :calculation_category_ids,
         calc_positions_attributes: [:id, :calculation_id, :position_salary_id, :working_time, :time_coeff, :note, :_destroy],
         calc_inventories_attributes: [:id, :calculation_id, :inventory_parameter_id, :width, :length, :quantity, :note, :_destroy],
         calc_equipments_attributes: [:id, :calculation_id, :equipment_parameter_id, :usage_time, :note, :_destroy],
@@ -150,6 +163,15 @@ class CalculationsController < ApplicationController
 
     def category_params
       params.require(:calculation).permit(:calculation_category_ids)
+    end
+
+    def calculation_create_params
+      params.require(:calculation).permit(:name, :price, :calculation_category_ids,
+        calc_positions_attributes: [:calculation_id, :position_salary_id, :working_time, :time_coeff, :note, :_destroy],
+        calc_inventories_attributes: [:calculation_id, :inventory_parameter_id, :width, :length, :quantity, :note, :_destroy],
+        calc_equipments_attributes: [:calculation_id, :equipment_parameter_id, :usage_time, :note, :_destroy],
+        calc_prices_attributes: [:calculation_id, :customer_category_id, :price],
+        calc_competitors_attributes: [:calculation_id, :competitor_id, :price])
     end
 
     def collection_for_parent_select

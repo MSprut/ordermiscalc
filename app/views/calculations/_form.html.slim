@@ -210,4 +210,8 @@
 
     hr
     .row.justify-content-center.mt-3.mb-3
-      = f.submit 'Сохранить', class: "btn btn-primary btn-sm"
+      - if @calculation.persisted?
+        = f.submit 'Редактировать', class: "btn btn-primary btn-sm mx-2"
+        = f.submit 'Сохранить как', class: "btn btn-primary btn-sm mx-2"
+      - else
+        = f.submit 'Сохранить', class: "btn btn-primary btn-sm"

@@ -160,7 +160,7 @@ $(document).on 'turbolinks:load', ->
     $.when.apply($, ajax_requests).done ->
       calcSingleRowSum obj
       CalcTotal()
-    getCustomersPrices()
+      getCustomersPrices()
 
   $("select[id$='_position_salary_id'], select[id$='_inventory_parameter_id'], select[id$='_equipment_parameter_id']").change (event) ->
     obj = $(this)
@@ -169,7 +169,8 @@ $(document).on 'turbolinks:load', ->
     $.when.apply($, ajax_requests).done ->
       calcSingleRowSum(obj)
       CalcTotal()
-    getCustomersPrices()
+    $.when.apply($, ajax_requests).done ->
+      getCustomersPrices()
 
     #----- CLONE SELECT VALUE FROM ORIGINAL TO CLONE
   window.cloneSelectValue = (original, clone, prefix) ->
