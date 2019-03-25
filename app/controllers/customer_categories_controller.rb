@@ -64,7 +64,7 @@ class CustomerCategoriesController < ApplicationController
   def destroy
     @customer_category.update_column(:deleted, true)
     respond_to do |format|
-      CustomerCategoryParameter.set_irrelevant(@customer_category.id)
+      #CustomerCategoryParameter.set_irrelevant(@customer_category.id)
       flash[:success] = 'Категория успешно удалено.'
       format.html { redirect_to customer_categories_path }
     end
@@ -73,6 +73,7 @@ class CustomerCategoriesController < ApplicationController
   def restore
     @customer_category.update_column(:deleted, false)
     respond_to do |format|
+      @customer_category.customer_category_parameters.set_relevant
       flash[:success] = 'Категория успешно восстановлена.'
       format.html { redirect_to customer_categories_path }
       format.json { head :no_content }
