@@ -2,7 +2,7 @@
 <%# logger.debug('BLOCK: '+@block.to_s) %>
 <%# logger.debug('PRICE: '+@price.to_s) %>
 <%# logger.debug('UNIT_NAME: '+@unit.to_s) %>
-<%# logger.debug('ARRAY: '+@prices.inspect) %>
+<% logger.debug('PERCENTS: ' + @percents.inspect) %>
 
 <% @percents.each_with_index do |pr, i| %>
   $('input[id$="' + <%= i %> + '_overheads_percent"]').val(<%= pr.overheads_percent %>);
