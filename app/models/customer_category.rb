@@ -5,4 +5,5 @@ class CustomerCategory < ApplicationRecord
   validates :name, presence: true
 
   scope :not_deleted, -> { where(deleted: false) }
+  scope :ordered_by_name, -> { order_by(name: :asc) }
 end

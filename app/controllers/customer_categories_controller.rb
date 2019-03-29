@@ -90,6 +90,6 @@ class CustomerCategoriesController < ApplicationController
     def customer_category_params
       params.require(:customer_category).permit(:name,
         customer_category_parameters_attributes: [:customer_category_id, :user_id, :manager_percent,
-          :profit_percent, :overheads_percent, :actual])
+          :profit_percent, :overheads_percent, :tax_percent, :actual])
     end
 end

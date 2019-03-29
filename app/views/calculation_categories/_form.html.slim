@@ -12,23 +12,26 @@
       table.table.table-sm.table-striped.table-light.table-hover.mb-4
         thead.bg-secondary.text-white.small
           tr.d-flex
-            th.col-6 Категория потребителей
-            th.col-2 Сбыт, %
+            th.col-4 Категория потребителей
             th.col-2 Накладные, %
+            th.col-2 Сбыт, %
             th.col-2 Прибыль, %
+            th.col-2 Налог, %
 
         tbody
-          = f.fields_for :calc_percents, @calculation_category.calc_percents  do |cp|
+          = f.fields_for :calc_category_percents, @calculation_category.calc_category_percents  do |cp|
             tr.d-flex
-              td.col-6
+              td.col-4
                 = cp.object.customer_category_parameter.customer_category.name
                 = cp.hidden_field :customer_category_parameter_id
               td.col-2
-                = cp.text_field :manager_percent, class: 'form-control form-control-xs', required: true
-              td.col-2
                 = cp.text_field :overheads_percent, class: 'form-control form-control-xs', required: true
               td.col-2
+                = cp.text_field :manager_percent, class: 'form-control form-control-xs', required: true
+              td.col-2
                 = cp.text_field :profit_percent, class: 'form-control form-control-xs', required: true
+              td.col-2
+                = cp.text_field :tax_percent, class: 'form-control form-control-xs', required: true
 
     hr
     .row.justify-content-center.mt-3.mb-3

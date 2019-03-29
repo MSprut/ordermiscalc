@@ -1,0 +1,12 @@
+<%# logger.debug('NUM: '+@num.to_s) %>
+<%# logger.debug('BLOCK: '+@block.to_s) %>
+<%# logger.debug('PRICE: '+@price.to_s) %>
+<%# logger.debug('UNIT_NAME: '+@unit.to_s) %>
+<%# logger.debug('ARRAY: '+@prices.inspect) %>
+
+<% @percents.each_with_index do |pr, i| %>
+  $('input[id$="' + <%= i %> + '_overheads_percent"]').val(<%= pr.overheads_percent %>);
+  $('input[id$="' + <%= i %> + '_manager_percent"]').val(<%= pr.manager_percent %>);
+  $('input[id$="' + <%= i %> + '_profit_percent"]').val(<%= pr.profit_percent %>);
+  $('input[id$="' + <%= i %> + '_tax_percent"]').val(<%= pr.tax_percent %>);
+<% end %>

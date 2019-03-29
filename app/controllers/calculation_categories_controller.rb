@@ -82,8 +82,8 @@ class CalculationCategoriesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def calculation_category_params
       params.require(:calculation_category).permit(:name, :parent_id, calculation_ids: [],
-        calc_percents_attributes: [:id, :calculation_category_id, :customer_category_parameter_id,
-        :manager_percent, :profit_percent, :overheads_percent])
+        calc_category_percents_attributes: [:id, :calculation_category_id, :customer_category_parameter_id,
+        :manager_percent, :profit_percent, :overheads_percent, :tax_percent])
     end
 
     def collection_for_parent_select
@@ -104,11 +104,12 @@ class CalculationCategoriesController < ApplicationController
         customers_categories.each do |cc|
           customer_params = cc.customer_category_parameters.get_actual.map { |r| r.attributes.symbolize_keys }
           customer_params = customer_params.first
-          @calculation_category.calc_percents.build(
+          @calculation_category.calc_category_percents.build(
             customer_category_parameter_id: customer_params[:id],
             manager_percent: customer_params[:manager_percent],
             profit_percent: customer_params[:profit_percent],
-            overheads_percent: customer_params[:overheads_percent]) unless @calculation_category.calc_percents.collect(&:customer_category_parameter_id).include?(customer_params[:id])
+            overheads_percent: customer_params[:overheads_percent],
+            tax_percent: customer_params[:tax_percent]) unless @calculation_category.calc_category_percents.collect(&:customer_category_parameter_id).include?(customer_params[:id])
       end
     end
 end

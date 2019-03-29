@@ -3,6 +3,7 @@ class CustomerCategoryParameter < ApplicationRecord
   validates :manager_percent, presence: true
   validates :profit_percent, presence: true
   validates :overheads_percent, presence: true
+  validates :tax_percent, presence: true
 
   scope :set_relevant, -> { last.update_column(:actual, true) }
   scope :get_actual, -> { where(actual: true) }

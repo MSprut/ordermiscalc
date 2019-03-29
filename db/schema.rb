@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_19_202829) do
+ActiveRecord::Schema.define(version: 2019_03_27_215405) do
 
   create_table "accountant_preferences", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.decimal "income_tax_percent", precision: 5, scale: 2, default: "0.0", null: false
@@ -22,6 +22,19 @@ ActiveRecord::Schema.define(version: 2019_03_19_202829) do
     t.boolean "actual", default: true, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "calc_category_percents", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "calculation_category_id"
+    t.bigint "customer_category_parameter_id"
+    t.decimal "manager_percent", precision: 5, scale: 2, default: "0.0", null: false
+    t.decimal "profit_percent", precision: 5, scale: 2, default: "0.0", null: false
+    t.decimal "overheads_percent", precision: 5, scale: 2, default: "0.0", null: false
+    t.decimal "tax_percent", precision: 5, scale: 2, default: "0.0", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["calculation_category_id"], name: "index_calc_category_percents_on_calculation_category_id"
+    t.index ["customer_category_parameter_id"], name: "index_calc_category_percents_on_customer_category_parameter_id"
   end
 
   create_table "calc_competitors", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -58,18 +71,6 @@ ActiveRecord::Schema.define(version: 2019_03_19_202829) do
     t.index ["inventory_parameter_id"], name: "index_calc_inventories_on_inventory_parameter_id"
   end
 
-  create_table "calc_percents", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.bigint "calculation_category_id"
-    t.decimal "manager_percent", precision: 5, scale: 2, default: "0.0", null: false
-    t.decimal "profit_percent", precision: 5, scale: 2, default: "0.0", null: false
-    t.decimal "overheads_percent", precision: 5, scale: 2, default: "0.0", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.bigint "customer_category_parameter_id"
-    t.index ["calculation_category_id"], name: "index_calc_percents_on_calculation_category_id"
-    t.index ["customer_category_parameter_id"], name: "index_calc_percents_on_customer_category_parameter_id"
-  end
-
   create_table "calc_positions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "calculation_id"
     t.bigint "position_salary_id"
@@ -88,6 +89,10 @@ ActiveRecord::Schema.define(version: 2019_03_19_202829) do
     t.decimal "price", precision: 12, scale: 4, default: "0.0", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.decimal "manager_percent", precision: 5, scale: 2, default: "0.0", null: false
+    t.decimal "profit_percent", precision: 5, scale: 2, default: "0.0", null: false
+    t.decimal "overheads_percent", precision: 5, scale: 2, default: "0.0", null: false
+    t.decimal "tax_percent", precision: 5, scale: 2, default: "0.0", null: false
     t.index ["calculation_id"], name: "index_calc_prices_on_calculation_id"
     t.index ["customer_category_id"], name: "index_calc_prices_on_customer_category_id"
   end
@@ -141,6 +146,7 @@ ActiveRecord::Schema.define(version: 2019_03_19_202829) do
     t.boolean "actual", default: true, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.decimal "tax_percent", precision: 5, scale: 2, default: "0.0", null: false
     t.index ["customer_category_id"], name: "index_customer_category_parameters_on_customer_category_id"
     t.index ["user_id"], name: "index_customer_category_parameters_on_user_id"
   end
@@ -228,7 +234,6 @@ ActiveRecord::Schema.define(version: 2019_03_19_202829) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  add_foreign_key "calc_percents", "customer_category_parameters"
   add_foreign_key "inventory_categories_inventories", "inventories"
   add_foreign_key "inventory_categories_inventories", "inventory_categories"
   add_foreign_key "position_salaries", "accountant_preferences"

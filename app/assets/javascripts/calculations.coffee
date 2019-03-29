@@ -57,11 +57,24 @@ $(document).on 'turbolinks:load', ->
       data:
         id: calc_id,
         direct_cost: cost,
-        customer_categry_ids: ids
+        customer_category_ids: ids
 
+  window.loadCategoryPercents = ->
+    category_id = $('#calculation_calculation_category_ids option:selected').val()
+    ids = []
+    $('.customer-category-id').each (index) ->
+      ids.push $(this).val()
+
+    return $.ajax
+      url: "/calculations/load_category_percents"
+      type: "GET"
+      dataType: "script"
+      data:
+        category_id: category_id,
+        customer_category_ids: ids
 
   window.calcSingleRowSum = (obj) ->
-    if $("#clone_main_show").length == 0
+    if $("#clone_main_show").length == 0 #&& $(obj).attr('id') != 'prices_table'
       class_name = $(obj).parents('table').attr('class').match(/\w*_block_table\b/)[0]
       prefix = class_name.substring 0, class_name.indexOf "_block_table" #get block prefix
       num = $(obj).closest("tr").find("td.body-row-id").text()
@@ -136,6 +149,29 @@ $(document).on 'turbolinks:load', ->
             $("label[for='" + prefix + "_header_total']").text 'пусто'
     #getCustomersPrices()
 
+  window.calcCustomerPrice = ->
+    if $("#clone_main_show").length == 0
+      amount = 0
+      block = $('.customers_prices_table')
+      rows = block.find 'tr.body-row'
+      direct = Number($('.direct-cost').val())
+
+      rows.each ->
+        overheads_percent = Number($(this).find('.overheads-perc').val())
+        manager_percent = Number($(this).find('.manager-perc').val())
+        profit_percent = Number($(this).find('.profit-perc').val())
+        tax_percent = Number($(this).find('.tax-perc').val())
+
+        overheads = direct * (overheads_percent / 100.0)
+        manager = (direct + overheads) * (manager_percent / 100.0)
+        costs = direct + overheads + manager
+        profit = costs * (profit_percent / 100.0)
+        price_not_tax = costs + profit
+        tax = price_not_tax  * (tax_percent / 100.0)
+        price = price_not_tax + tax
+
+        if !isNaN(price)
+          $(this).find('.customer-price').val(price.toFixed 4)
 
   #----- ROW SUM RECALCULATION ON KEY PRESS
   $('input, textarea').keyup (event) ->
@@ -149,10 +185,12 @@ $(document).on 'turbolinks:load', ->
         #event.target.id != "adv_module_name"
         #calcSingleRowSum @
         #CalcTotal()
-      ajax_requests.push(calcSingleRowSum @)
-      $.when.apply($, ajax_requests).done ->
-        CalcTotal()
-      getCustomersPrices()
+      if !event.target.classList.contains('percent')
+        ajax_requests.push(calcSingleRowSum @)
+        $.when.apply($, ajax_requests).done ->
+          CalcTotal()
+      #getCustomersPrices()
+      calcCustomerPrice()
 
   #----- GET UNIT AND PRICE FOR MATERIALS OR SERVICES
   window.onchangeMaterial = (obj) ->
@@ -160,7 +198,8 @@ $(document).on 'turbolinks:load', ->
     $.when.apply($, ajax_requests).done ->
       calcSingleRowSum obj
       CalcTotal()
-      getCustomersPrices()
+      #getCustomersPrices()
+      calcCustomerPrice()
 
   $("select[id$='_position_salary_id'], select[id$='_inventory_parameter_id'], select[id$='_equipment_parameter_id']").change (event) ->
     obj = $(this)
@@ -170,7 +209,14 @@ $(document).on 'turbolinks:load', ->
       calcSingleRowSum(obj)
       CalcTotal()
     $.when.apply($, ajax_requests).done ->
-      getCustomersPrices()
+      #getCustomersPrices()
+      calcCustomerPrice()
+
+  $("select[id$='_calculation_category_ids']").change (event) ->
+    ajax_requests.push(loadCategoryPercents())
+    $.when.apply($, ajax_requests).done ->
+      CalcTotal()
+      calcCustomerPrice()
 
     #----- CLONE SELECT VALUE FROM ORIGINAL TO CLONE
   window.cloneSelectValue = (original, clone, prefix) ->
@@ -243,7 +289,8 @@ $(document).on 'turbolinks:load', ->
     $(@).closest('tr').find('label').css 'color', '#d0d0d0' #set label color to 'disabled' value
     $('input[class=\'row_delete_member\']', master).eq(row_number - 1).attr 'value', 1 #set attribute :_destroy to "1"
     CalcTotal()
-    getCustomersPrices()
+    #getCustomersPrices()
+    calcCustomerPrice()
   #---------------------------------------------------------------------------------------
 
   #----- ADD ROW TO BODY OF ORDER BLOCK
@@ -281,7 +328,8 @@ $(document).on 'turbolinks:load', ->
     body.append clone #append clone
     #body.find('.row_material_selection:last').combobox() #create combobox for cloned select
     CalcTotal()
-    getCustomersPrices()
+    #getCustomersPrices()
+    calcCustomerPrice()
     return
     #--------------------- END ADD/CLONE
 
@@ -311,7 +359,8 @@ $(document).on 'turbolinks:load', ->
             calcSingleRowSum obj
             CalcTotal()
         $.when.apply($, ajax_requests).done ->
-          getCustomersPrices()
+          #getCustomersPrices()
+          calcCustomerPrice()
 
   #Фильтрует недопустимые символы в полях ввода при вводе цифр
   $('input').keypress (event) ->

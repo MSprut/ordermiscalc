@@ -178,35 +178,55 @@
         = f.hidden_field :price, value: '0.0', class: 'direct-cost'
 
     .row.mt-3.mb-3
-      .col-xs-6.col-md-6
-        table.table.table-sm.table-striped.table-light.table-hover.mb-4
+      .col-xs-12.col-md-12
+        table#prices_table.table.table-sm.table-striped.table-light.table-hover.mb-4.customers_prices_table
           thead.bg-secondary.text-white.small
             tr.d-flex
-              th.col-10 Конкурент
+              th.col-6 Категория потребителей
+              th.col-1 Накл-е, %
+              th.col-1 Сбыт, %
+              th.col-1 Прибыль, %
+              th.col-1 Налог, %
               th.col-2 Ст-ть, руб
-          tbody
-            = f.fields_for :calc_competitors, @calculation.calc_competitors  do |cc|
-              tr.d-flex
-                td.col-10
-                  = cc.object.competitor.name
-                  = cc.hidden_field :competitor_id
-                td.col-2
-                  = cc.text_field :price, class: 'form-control form-control-xs competitor-price'
-
-      .col-xs-6.col-md-6
-        table.table.table-sm.table-striped.table-light.table-hover.mb-4
-          thead.bg-secondary.text-white.small
-            tr.d-flex
-              th.col-9 Категория потребителей
-              th.col-3 Ст-ть, руб
-          tbody
+          tbody.customers_block_body
             = f.fields_for :calc_prices, @calculation.calc_prices  do |cp|
-              tr.d-flex.align-items-center
-                td.col-9
+              tr.d-flex.align-items-center.body-row
+                td.col-6
                   = cp.object.customer_category.name
                   = cp.hidden_field :customer_category_id, class: 'customer-category-id'
-                td.col-3
+                td.col-1
+                  = cp.text_field :overheads_percent, class: 'form-control form-control-xs overheads-perc percent'
+                td.col-1
+                  = cp.text_field :manager_percent, class: 'form-control form-control-xs manager-perc percent'
+                td.col-1
+                  = cp.text_field :profit_percent, class: 'form-control form-control-xs profit-perc percent'
+                td.col-1
+                  = cp.text_field :tax_percent, class: 'form-control form-control-xs tax-perc percent'
+                td.col-2
                   = cp.text_field :price, value: '0.0', class: 'form-control form-control-xs customer-price border-0 bg-warning text-right', readonly: true
+
+    .row.mt-3.mb-3
+      .col-xs-12.col-md-12
+        .accordion
+          .accordion-group
+            .accordion-heading.pl-2
+              = link_to "#competitors", class: 'accordion-toggle', data: { toggle: "collapse" } do
+                span Конкуренты
+            #competitors.accordion-body.collapse.border-0
+              .accordion-inner.ml-0
+                table.table.table-sm.table-striped.table-light.table-hover
+                  thead.category-header
+                    tr.d-flex
+                      th.col-10 Наименование
+                      th.col-2 Ст-ть, руб
+                  tbody
+                    = f.fields_for :calc_competitors, @calculation.calc_competitors  do |cc|
+                      tr.d-flex
+                        td.col-10
+                          = cc.object.competitor.name
+                          = cc.hidden_field :competitor_id
+                        td.col-2
+                          = cc.text_field :price, class: 'form-control form-control-xs competitor-price'
 
     hr
     .row.justify-content-center.mt-3.mb-3

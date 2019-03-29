@@ -20,6 +20,7 @@ Rails.application.routes.draw do
     collection do
       get 'get_unit_and_price', to: "calculations#get_unit_and_price"
       get 'get_customers_prices', to: "calculations#get_customers_prices"
+      get 'load_category_percents', to: "calculations#load_category_percents"
       delete "restore/:id" => "calculations#restore", as: :restore
     end
   end

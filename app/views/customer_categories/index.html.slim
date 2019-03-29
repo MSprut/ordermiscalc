@@ -7,18 +7,20 @@ table.table.table-sm.table-striped.table-light.table-hover.mb-4
   thead.bg-secondary.text-white.small
     tr
       th Наименование
+      th Накладные, %
       th Сбыт, %
       th Прибыль, %
-      th Накладные, %
+      th Налог, %
       th Действия
 
   tbody
     - @customer_categories.each do |eq|
       tr
         td = eq.name
+        td = eq.customer_category_parameters.last.try :overheads_percent
         td = eq.customer_category_parameters.last.try :manager_percent
         td = eq.customer_category_parameters.last.try :profit_percent
-        td = eq.customer_category_parameters.last.try :overheads_percent
+        td = eq.customer_category_parameters.last.try :tax_percent
         td
           /= link_to 'Показать', pos
           = link_to edit_customer_category_path(eq) do
@@ -33,18 +35,20 @@ h5.text-center.mt-5.text-danger Список удаленных категори
     thead.bg-secondary.text-white.small
       tr
         th Наименование
+        th Накладные, %
         th Сбыт, %
         th Прибыль, %
-        th Накладные, %
+        th Налог, %
         th Действия
 
     tbody
       - @removed_customer_categories.each do |eq|
         tr
           td = eq.name
+          td = eq.customer_category_parameters.last.try :overheads_percent
           td = eq.customer_category_parameters.last.try :manager_percent
           td = eq.customer_category_parameters.last.try :profit_percent
-          td = eq.customer_category_parameters.last.try :overheads_percent
+          td = eq.customer_category_parameters.last.try :tax_percent
           td
             = link_to restore_customer_categories_path(eq), data: { confirm: 'Вы уверены, что хотите восстановить категорию?' }, method: :delete do
               == material_icon.restore_from_trash.css_class('text-success ml-2')

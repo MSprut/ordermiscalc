@@ -145,6 +145,14 @@ class CalculationsController < ApplicationController
     end
   end
 
+  def load_category_percents
+    get_category_percents
+    respond_to do |f|
+      f.js { render layout: false, content_type: 'text/javascript' }
+      f.html
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_calculation
@@ -157,7 +165,7 @@ class CalculationsController < ApplicationController
         calc_positions_attributes: [:id, :calculation_id, :position_salary_id, :working_time, :time_coeff, :note, :_destroy],
         calc_inventories_attributes: [:id, :calculation_id, :inventory_parameter_id, :width, :length, :quantity, :note, :_destroy],
         calc_equipments_attributes: [:id, :calculation_id, :equipment_parameter_id, :usage_time, :note, :_destroy],
-        calc_prices_attributes: [:id, :calculation_id, :customer_category_id, :price],
+        calc_prices_attributes: [:id, :calculation_id, :customer_category_id, :overheads_percent, :manager_percent, :profit_percent, :tax_percent ,:price],
         calc_competitors_attributes: [:id, :calculation_id, :competitor_id, :price])
     end
 
@@ -170,7 +178,7 @@ class CalculationsController < ApplicationController
         calc_positions_attributes: [:calculation_id, :position_salary_id, :working_time, :time_coeff, :note, :_destroy],
         calc_inventories_attributes: [:calculation_id, :inventory_parameter_id, :width, :length, :quantity, :note, :_destroy],
         calc_equipments_attributes: [:calculation_id, :equipment_parameter_id, :usage_time, :note, :_destroy],
-        calc_prices_attributes: [:calculation_id, :customer_category_id, :price],
+        calc_prices_attributes: [:calculation_id, :customer_category_id, :overheads_percent, :manager_percent, :profit_percent, :tax_percent, :price],
         calc_competitors_attributes: [:calculation_id, :competitor_id, :price])
     end
 
@@ -222,7 +230,7 @@ class CalculationsController < ApplicationController
     def calculate_customers_prices
       @prices = []
       tax_pref = AccountantPreference.where(actual: true).first.tax_percent.to_f
-      @calculation.calculation_categories.first.calc_percents.each do |cp|
+      @calculation.calculation_categories.first.calc_category_percents.each do |cp|
         direct = params[:direct_cost].to_f
         overheads = direct * (cp.overheads_percent / 100.0)
         manager = (direct + overheads) * (cp.manager_percent / 100.0)
@@ -232,6 +240,14 @@ class CalculationsController < ApplicationController
         tax = price_not_tax  * (tax_pref / 100.0)
         price = price_not_tax + tax
         @prices << price
+      end
+    end
+
+    def get_category_percents
+      @percents = []
+      @category = CalculationCategory.find(params[:category_id])
+      @category.calc_category_percents.each do |cp|
+        @percents << cp
       end
     end
 end
