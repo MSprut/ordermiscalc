@@ -208,7 +208,7 @@ $(document).on 'turbolinks:load', ->
     $.when.apply($, ajax_requests).done ->
       calcSingleRowSum(obj)
       CalcTotal()
-    $.when.apply($, ajax_requests).done ->
+    #$.when.apply($, ajax_requests).done ->
       #getCustomersPrices()
       calcCustomerPrice()
 

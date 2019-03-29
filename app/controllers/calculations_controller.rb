@@ -249,7 +249,7 @@ class CalculationsController < ApplicationController
       @category.calc_category_percents.each do |cp|
         @percents << cp
       end
-      puts "\n" + 'PERCENTS FROM ACTION: ' + @percents.inspect + "\n\r"
+      #puts "\n" + 'PERCENTS FROM ACTION: ' + @percents.inspect + "\n\r"
       @percents
     end
 end
