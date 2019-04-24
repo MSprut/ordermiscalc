@@ -21,6 +21,8 @@
 // require rails-ujs
 //= require_tree .
 
+//= require bootstrap-select
+//= require jquery-ui
 
 //= require inventory_categories
 //= require calculation_categories

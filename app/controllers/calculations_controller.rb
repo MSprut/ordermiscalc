@@ -107,6 +107,9 @@ class CalculationsController < ApplicationController
     #authorize :outdoor_advertising, :get_unit_and_price?
     if params[:selection] != ""
       case params[:block]
+        when 'related_calculations'
+          object = Calculation.find(params[:selection])
+          @unit = object.unit.nil? ? '' : object.unit.name
         when 'positions'
           salary = PositionSalary.find(params[:selection])
           prefs = AccountantPreference.find(salary.accountant_preference_id)
@@ -161,12 +164,13 @@ class CalculationsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def calculation_params
-      params.require(:calculation).permit(:name, :price, :calculation_category_ids,
+      params.require(:calculation).permit(:name, :unit_id, :price, :calculation_category_ids,
         calc_positions_attributes: [:id, :calculation_id, :position_salary_id, :working_time, :time_coeff, :note, :_destroy],
         calc_inventories_attributes: [:id, :calculation_id, :inventory_parameter_id, :width, :length, :quantity, :note, :_destroy],
         calc_equipments_attributes: [:id, :calculation_id, :equipment_parameter_id, :usage_time, :note, :_destroy],
         calc_prices_attributes: [:id, :calculation_id, :customer_category_id, :overheads_percent, :manager_percent, :profit_percent, :tax_percent ,:price],
-        calc_competitors_attributes: [:id, :calculation_id, :competitor_id, :price])
+        calc_competitors_attributes: [:id, :calculation_id, :competitor_id, :price],
+        related_calculations_attributes: [:id, :calculation_id, :related_calculation_id, :quantity, :note, :_destroy])
     end
 
     def category_params
@@ -174,12 +178,13 @@ class CalculationsController < ApplicationController
     end
 
     def calculation_create_params
-      params.require(:calculation).permit(:name, :price, :calculation_category_ids,
+      params.require(:calculation).permit(:name, :unit_id, :price, :calculation_category_ids,
         calc_positions_attributes: [:calculation_id, :position_salary_id, :working_time, :time_coeff, :note, :_destroy],
         calc_inventories_attributes: [:calculation_id, :inventory_parameter_id, :width, :length, :quantity, :note, :_destroy],
         calc_equipments_attributes: [:calculation_id, :equipment_parameter_id, :usage_time, :note, :_destroy],
         calc_prices_attributes: [:calculation_id, :customer_category_id, :overheads_percent, :manager_percent, :profit_percent, :tax_percent, :price],
-        calc_competitors_attributes: [:calculation_id, :competitor_id, :price])
+        calc_competitors_attributes: [:calculation_id, :competitor_id, :price],
+        related_calculations_attributes: [:calculation_id, :related_calculation_id, :quantity, :note, :_destroy])
     end
 
     def collection_for_parent_select
@@ -201,9 +206,12 @@ class CalculationsController < ApplicationController
       @position_salaries = PositionSalary.where(actual: true).includes(:position).order('positions.name asc').collect { |p| [ p.position.name, p.id ] }
       @equipment_parameters = EquipmentParameter.where(actual: true).includes(:equipment).order('equipment.name asc').collect { |e| [ e.equipment.name, e.id ] }
       @customer_categories = CustomerCategory.where(deleted: false).order(name: :asc).all
+      @units = Unit.order(name: :asc).map { |u| [ u.name, u.id ] }
+      @related_calculations = Calculation.where(deleted: false).order(name: :asc).map { |c| [ c.name, c.id ] }
     end
 
     def create_nested_attributes
+      @calculation.related_calculations.build if @calculation.related_calculations.blank?
       @calculation.calc_positions.build if @calculation.calc_positions.blank?
       @calculation.calc_inventories.build if @calculation.calc_inventories.blank?
       @calculation.calc_equipments.build if @calculation.calc_equipments.blank?

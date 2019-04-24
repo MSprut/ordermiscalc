@@ -6,6 +6,7 @@ $(document).on 'turbolinks:load', ->
   CURRENCY = ' руб'
   counter = {}
 
+  counter['related_calculations'] = 1
   counter['participants'] = 1
   counter['materials'] = 1
   counter['amortizations'] = 1
@@ -29,6 +30,7 @@ $(document).on 'turbolinks:load', ->
     if num == "" then num = 0 else num -= 1
 
     switch prefix
+      when 'related_calculations' then selection = $("#calculation_" + prefix + "_attributes_" + num + "_related_calculation_id option:selected").val()
       when 'positions' then selection = $("#calculation_calc_" + prefix + "_attributes_" + num + "_position_salary_id option:selected").val()
       when 'inventories' then selection = $("#calculation_calc_" + prefix + "_attributes_" + num + "_inventory_parameter_id option:selected").val()
       when 'equipments' then selection = $("#calculation_calc_" + prefix + "_attributes_" + num + "_equipment_parameter_id option:selected").val()
@@ -88,6 +90,8 @@ $(document).on 'turbolinks:load', ->
     square = 0.000000
     quantity = (parseFloat($("#calculation_calc_" + prefix + "_attributes_" + num + "_quantity").val()) || 0)#.toFixed 4
     switch prefix
+      when 'related_calculations'
+        return false
       when 'inventories'
         width = (parseFloat($("#calculation_calc_" + prefix + "_attributes_" + num + "_width").val()) || 0)#.toFixed 2
         length = (parseFloat($("#calculation_calc_" + prefix + "_attributes_" + num + "_length").val()) || 0)#.toFixed 2
@@ -201,7 +205,7 @@ $(document).on 'turbolinks:load', ->
       #getCustomersPrices()
       calcCustomerPrice()
 
-  $("select[id$='_position_salary_id'], select[id$='_inventory_parameter_id'], select[id$='_equipment_parameter_id']").change (event) ->
+  $("select[id$='_related_calculation_id'], select[id$='_position_salary_id'], select[id$='_inventory_parameter_id'], select[id$='_equipment_parameter_id']").change (event) ->
     obj = $(this)
     #$('input[id$="_adv_material_id"]').val($(this).val())
     ajax_requests.push(getUnitAndPrice(this, 0))
@@ -243,11 +247,9 @@ $(document).on 'turbolinks:load', ->
     $(row).find('.row-working-time').val '0.00'
     $(row).find('.row-note').val ''
     $(row).find('.row-time-coeff').val '0.00'
+    $(row).find('.row-unit').text ''
 
-    if prefix == 'inventories'
-      $(row).find('select[class=\'row_material_selection\']').val ''
-    else
-      $(row).find('select[class$=\'_selection\']'). val ''
+    $(row).find('select[class$=\'-select\']').val ''
     
   #----- RENUMBER OBJECT ATTRIBUTES IN COPIED OR CLONED ROW
   window.renumberRowObjectsAttributes = (row) ->
@@ -304,7 +306,7 @@ $(document).on 'turbolinks:load', ->
     master = $(@).parents 'table.' + class_name #get table object
     body = master.find '.' + prefix + '_block_body' #find table body
     original = body.find('tr:last') #find last row in body
-    #original.find('.row_material_selection').combobox "destroy" #destroy combobox widget before row clone
+    original.find('select[class$="-select"]').combobox "destroy" #destroy combobox widget before row clone
     clone = original.clone(true)  #clone row
     #orig_sel = original.find '.row_material_selection'
     #orig_sel.combobox()
@@ -326,7 +328,7 @@ $(document).on 'turbolinks:load', ->
     else
       cloneSelectValue original, clone, prefix #clone all values
     body.append clone #append clone
-    #body.find('.row_material_selection:last').combobox() #create combobox for cloned select
+    body.find('select[class$="-select"]').combobox() #create combobox for cloned select
     CalcTotal()
     #getCustomersPrices()
     calcCustomerPrice()
@@ -399,3 +401,106 @@ $(document).on 'turbolinks:load', ->
     e.prevenDeffault()
     e.stopImmediatePropagation()
     $('.collapse').collapse('show');
+
+# COMBOBOX
+  $ ->
+    $.widget 'custom.combobox',
+      _create: ->
+        @wrapper = $('<span>').addClass('custom-combobox').insertAfter @element
+        @element.hide()
+        @_createAutocomplete()
+        @_createShowAllButton()
+        return
+      _createAutocomplete: ->
+        selected = @element.children(':selected')
+        value = if selected.val() then selected.text() else ''
+        @input = $('<input>').appendTo(@wrapper).val(value).attr('title', '')
+        .addClass('custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left')
+        .autocomplete(
+          delay: 0
+          minLength: 0
+          source: $.proxy(this, '_source')).tooltip(classes: 'ui-tooltip': 'ui-state-highlight').focus ->
+            $(@).find('input').select()
+            $(@).select()
+            return
+        @_on @input,
+          autocompleteselect: (event, ui) ->
+            ui.item.option.selected = true
+            @_trigger 'select', event, item: ui.item.option
+            onchangeMaterial @element #Update unit and price after item selection
+            return
+          autocompletechange: '_removeIfInvalid'
+        return
+      _createShowAllButton: ->
+        input = @input
+        wasOpen = false
+        #$('<a>').attr('tabIndex', -1).attr('title', 'Show All Items').tooltip().appendTo(@wrapper).button(
+        $('<a>').attr('tabIndex', -1).appendTo(@wrapper).button(  #Without popup tooltip
+          icons: primary: 'ui-icon-triangle-1-s'
+          text: false).removeClass('ui-corner-all').addClass('custom-combobox-toggle ui-corner-right').on('mousedown', ->
+          wasOpen = input.autocomplete('widget').is ':visible'
+          return
+        ).on 'click', ->
+          input.trigger 'focus'
+          # Close if already visible
+          if wasOpen
+            return
+          # Pass empty string as value to search for, displaying all results
+          input.autocomplete 'search', ''
+          return
+        return
+      _source: (request, response) ->
+        matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), 'i')
+        response @element.children('option').map(->
+          text = $(this).text()
+          if @value and (!request.term or matcher.test(text))
+            return {
+              label: text
+              value: text
+              option: @
+            }
+          return
+        )
+        return
+      _removeIfInvalid: (event, ui) ->
+        # Selected an item, nothing to do
+        if ui.item
+          return
+        # Search for a match (case-insensitive)
+        value = @input.val()
+        valueLowerCase = value.toLowerCase()
+        valid = false
+        @element.children('option').each ->
+          if $(@).text().toLowerCase() == valueLowerCase
+            @selected = valid = true
+            return false
+          return
+        # Found a match, nothing to do
+        if valid
+          return
+        # Remove invalid value
+        @input.val('').attr('title', value + ' не совпадает ни с одной позицией').tooltip 'open'
+        @element.val ''
+        @_delay (->
+          @input.tooltip('close').attr 'title', ''
+          return
+        ), 2500
+        #@input.autocomplete('instance').term = ''
+        @input.autocomplete().data("uiAutocomplete").term = '' #New syntax for prevent instance error
+        return
+      _destroy: ->
+        @wrapper.remove()
+        @element.show()
+        return
+
+  $ ->
+    $('.row-related-calculation-select').combobox()
+    $('.row-position-select').combobox()
+    $('.row-inventory-select').combobox()
+    $('.row-equipment-select').combobox()
+    $('.calculation-categories').combobox()
+    $('#toggle').on 'click', ->
+      $('.row-related-calculation-select').toggle()
+      return
+
+# END COMBOBOX

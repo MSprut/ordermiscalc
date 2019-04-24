@@ -63,6 +63,9 @@ class CustomerCategoriesController < ApplicationController
   # DELETE /customer_categories/1.json
   def destroy
     @customer_category.update_column(:deleted, true)
+    CalcCategoryPercent.where(customer_category_id: @customer_category.id).destroy_all
+    CalcPrice.where(customer_category_id: @customer_category.id).destroy_all
+
     respond_to do |format|
       #CustomerCategoryParameter.set_irrelevant(@customer_category.id)
       flash[:success] = 'Категория успешно удалено.'

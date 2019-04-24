@@ -104,7 +104,9 @@ class CalculationCategoriesController < ApplicationController
         customers_categories.each do |cc|
           customer_params = cc.customer_category_parameters.get_actual.map { |r| r.attributes.symbolize_keys }
           customer_params = customer_params.first
+          puts "\n" + 'CAT ID= ' + cc.id.inspect + "\n\r"
           @calculation_category.calc_category_percents.build(
+            customer_category_id: cc.id,
             customer_category_parameter_id: customer_params[:id],
             manager_percent: customer_params[:manager_percent],
             profit_percent: customer_params[:profit_percent],

@@ -24,6 +24,7 @@
               td.col-4
                 = cp.object.customer_category_parameter.customer_category.name
                 = cp.hidden_field :customer_category_parameter_id
+                = cp.hidden_field :customer_category_id, class: 'customer-category-id'
               td.col-2
                 = cp.text_field :overheads_percent, class: 'form-control form-control-xs', required: true
               td.col-2

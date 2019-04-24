@@ -38,6 +38,7 @@ gem 'axlsx_rails'
 
 gem 'best_in_place'
 gem 'bootstrap', '~> 4.1.3'
+gem 'bootstrap-select-rails'
 #gem 'bootstrap-sass', '~> 3.3.6'
 
 gem 'carrierwave', '~> 1.0'

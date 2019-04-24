@@ -12,12 +12,14 @@
  *
  *= require font-awesome
  *= require material_icons
+ *= require jquery-ui
  * require_tree .
  * require_self
  */
 
 //@import "bootstrap-sprockets";
 @import "bootstrap";
+@import 'bootstrap-select';
 
 @import "accountant_preferences";
 @import "inventory_categories";
@@ -200,4 +202,75 @@ select.form-control option {
 .col-0 {
   flex: 0 0 3%;
   max-width: 3%;
+}
+
+.bootstrap-select {
+  .btn {
+    padding: 0 0.75rem;
+  }
+}
+
+.bs-searchbox {
+  .form-control {
+    height: calc(1.8rem + 2px);
+  }
+}
+
+.dropdown-toggle {
+  border: 1px solid #ccc;
+
+  &:hover {
+    background-color: transparent;
+  }
+}
+
+.custom-combobox {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+  }
+  .custom-combobox-toggle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin-left: -24px;
+    padding: 0;
+    width:24px;
+    border-left: none;
+  }
+  .custom-combobox-toggle:hover {
+    background: transparent;
+    border-color: #b0b0b0;
+    border-left: none;
+  }
+  .custom-combobox-input {
+    margin: 0;
+    padding: 3px 6px;
+    color: black;
+    text-decoration: none;
+    font-weight: normal;
+    width: 100%;
+    border-radius: 3px;
+  }
+  .ui-autocomplete {
+    max-height: 200px;
+    overflow-y: auto;   /* prevent horizontal scrollbar */
+    overflow-x: hidden; /* add padding to account for vertical scrollbar */
+    z-index:1000 !important;
+}
+  .ui-autocomplete-input {
+    //width: 100%;//415px;
+    font-size: 10pt;
+}
+.ui-menu-item a.ui-state-focus {
+  //width: 100%;//415px;
+color:white;
+font-weight: normal;
+background: #c0c0c0;
+padding: 2px;
+border-color: #b0b0b0;
+}
+ul.ui-autocomplete.ui-menu {
+  //width: 100%;//450px;
+  font-size: 10pt;
 }

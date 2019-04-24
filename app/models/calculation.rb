@@ -5,6 +5,8 @@ class Calculation < ApplicationRecord
   scope :not_deleted, -> { where(deleted: false) }
   scope :deleted, -> { where(deleted: true) }
 
+  belongs_to :unit
+  
   #----- POSITIONS -------------------------------------
   has_many :calc_positions, :dependent => :destroy
   accepts_nested_attributes_for :calc_positions,
@@ -28,4 +30,7 @@ class Calculation < ApplicationRecord
 
   has_many :calc_competitors
   accepts_nested_attributes_for :calc_competitors
+
+  has_many :related_calculations
+  accepts_nested_attributes_for :related_calculations
 end

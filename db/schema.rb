@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_27_215405) do
+ActiveRecord::Schema.define(version: 2019_04_14_221045) do
 
   create_table "accountant_preferences", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.decimal "income_tax_percent", precision: 5, scale: 2, default: "0.0", null: false
@@ -33,7 +33,9 @@ ActiveRecord::Schema.define(version: 2019_03_27_215405) do
     t.decimal "tax_percent", precision: 5, scale: 2, default: "0.0", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "customer_category_id"
     t.index ["calculation_category_id"], name: "index_calc_category_percents_on_calculation_category_id"
+    t.index ["customer_category_id"], name: "index_calc_category_percents_on_customer_category_id"
     t.index ["customer_category_parameter_id"], name: "index_calc_category_percents_on_customer_category_parameter_id"
   end
 
@@ -121,6 +123,8 @@ ActiveRecord::Schema.define(version: 2019_03_27_215405) do
     t.string "name", default: "", null: false
     t.decimal "price", precision: 12, scale: 4, default: "0.0", null: false
     t.boolean "deleted", default: false, null: false
+    t.bigint "unit_id"
+    t.index ["unit_id"], name: "index_calculations_on_unit_id"
   end
 
   create_table "competitors", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -227,6 +231,16 @@ ActiveRecord::Schema.define(version: 2019_03_27_215405) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "related_calculations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "calculation_id"
+    t.integer "related_calculation_id"
+    t.decimal "quantity", precision: 12, scale: 6, default: "0.0", null: false
+    t.string "note", default: "", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["calculation_id"], name: "index_related_calculations_on_calculation_id"
+  end
+
   create_table "units", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", limit: 127, default: "", null: false
     t.boolean "deleted", default: false, null: false
@@ -234,6 +248,8 @@ ActiveRecord::Schema.define(version: 2019_03_27_215405) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  add_foreign_key "calc_category_percents", "customer_categories"
+  add_foreign_key "calculations", "units"
   add_foreign_key "inventory_categories_inventories", "inventories"
   add_foreign_key "inventory_categories_inventories", "inventory_categories"
   add_foreign_key "position_salaries", "accountant_preferences"

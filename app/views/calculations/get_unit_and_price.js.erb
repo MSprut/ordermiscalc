@@ -3,7 +3,7 @@
 <%# logger.debug('PRICE: '+@price.to_s) %>
 <%# logger.debug('UNIT_NAME: '+@unit.to_s) %>
 
-
+$("label[for='calculation_" + '<%= @block %>' + "_attributes_" + <%= @num %>+"_unit']").text('<%= @unit %>');
 $("label[for='calculation_calc_" + '<%= @block %>' + "_attributes_" + <%= @num %>+"_unit']").text('<%= @unit %>');
 $("label[for='calculation_calc_" + '<%= @block %>' + "_attributes_" + <%= @num %>+"_salary']").text('<%= @price %>');
 $("label[for='calculation_calc_" + '<%= @block %>' + "_attributes_" + <%= @num %>+"_lifetime']").text('<%= @lifetime %>');

@@ -3,7 +3,7 @@ module CalculationCategoriesHelper
 
     categories.map do |category, sub_categories|
       (content_tag :div, nil, class: 'accordion-heading' do
-        (link_to "##{category.name.gsub(/[\s,]+/, '-').downcase}", class: 'accordion-toggle', data: { toggle: "collapse" } do
+        (link_to "#id-#{category.name.gsub(/[\s,]+/, '-').downcase}", class: 'accordion-toggle', data: { toggle: "collapse" } do
           concat content_tag :i, nil, class: 'fa fa-folder'
           concat content_tag :span, "#{category.name}"
           concat tag.span "подкат: #{category.children.count}", class: 'badge badge-success'
@@ -19,7 +19,7 @@ module CalculationCategoriesHelper
         end)
       end) +
 
-      (content_tag :div, nil, class: 'accordion-body collapse', id: "#{category.name.gsub(/[\s,]+/, '-').downcase}" do
+      (content_tag :div, nil, class: 'accordion-body collapse', id: "id-#{category.name.gsub(/[\s,]+/, '-').downcase}" do
         (content_tag :div, nil, class: 'accordion-inner' do
           if category.calculations.not_deleted.present?
             concat (content_tag :table, nil, class: 'table table-striped table-sm table-light table-hover' do
@@ -41,7 +41,8 @@ module CalculationCategoriesHelper
               (content_tag :tbody do
                 category.calculations.not_deleted.order(name: :asc).each do |calc|
                   concat (content_tag :tr, class: 'd-flex' do
-                    concat content_tag :td, calc.name, class: "col-#{11-@cust_cat_count-@compet_count}"
+                    unit = calc.unit.nil? ? '' : calc.unit.name
+                    concat content_tag :td, "#{calc.name+'('+unit+')'}", class: "col-#{11-@cust_cat_count-@compet_count}"
                     #concat content_tag :td, '%.4f' % calc.price, class: 'col-2'
                     if calc.calc_prices.present?
                       calc.calc_prices.each do |cp|

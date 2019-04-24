@@ -8,7 +8,11 @@
         = f.label :name, 'Наименование', class: 'form-control-placeholder'
       .form-group.col-sm-6
         = f.label :calculation_category_ids, 'Категория калькуляции', class: 'small-label-placeholder'
-        = f.select :calculation_category_ids, @calculation_categories, { include_blank: '...' }, { class: 'form-control form-control-sm' }
+        = f.select :calculation_category_ids, @calculation_categories, { include_blank: '...' }, class: 'form-control form-control-sm', required: true
+    .row.mt-3
+      .form-group.col-sm-2
+        = f.label :unit_id, 'Ед. измерения', class: 'small-label-placeholder'
+        = f.select :unit_id, @units, { include_blank: '' }, { class: 'form-control form-control-sm', required: true }
 
     .row
       .col-xs-9.col-md-10
@@ -17,6 +21,53 @@
           i.fa.fa-compress.fa-rotate-45
         = button_tag '#', type: 'button', class: 'btn btn-outline-primary btn-sm expand-all' do
           i.fa.fa-expand.fa-rotate-45
+
+    .row.my-3
+      .col-xs-12.col-md-12
+        .accordion
+          .accordion-group
+            .accordion-heading.pl-2
+              = link_to "#related_calculations", class: 'accordion-toggle', data: { toggle: "collapse" } do
+                span Калькуляции
+                span = label_tag :_header_total, 'пусто', class: 'label-xs mb-0 row-sum text-danger header-total'
+            #related_calculations.accordion-body.collapse.border-0
+              .accordion-inner.ml-0
+                table.table.table-xs.table-light.table-hover.related_calculations_block_table
+                  thead.category-header
+                    tr.d-flex
+                      th.col-0 №
+                      th.col-4#add_position Наименование
+                      th.col-1 Ед. изм.
+                      th.col-1
+                      th.col-1
+                      th.col-1 Кол-во
+                      th.col-3 Примечания
+                      th.col-0
+                  tbody.related_calculations_block_body
+                    = f.fields_for :related_calculations do |cp|
+                      tr.d-flex.body-row
+                        td.col-0.body-row-id = label_tag "calc_row_id[]", '1', class: 'label-xs mb-0'
+                        td.col-4 = cp.select :related_calculation_id, @related_calculations, { include_blank: '...', selected: cp.object.related_calculation_id }, class: 'form-control form-control-xs row-related-calculation-select', required: true
+                        td = cp.label :unit, '', class: 'label-xs text-muted mb-0 row-unit'
+                        td.col-1
+                        td.col-1
+                        td.col-1
+                        td.col-1 = cp.text_field :quantity, class: 'form-control form-control-xs row-quantity', required: true
+                        td.col-3 = cp.text_field :note, class: 'form-control form-control-xs row-note'
+                        td.col-0#del-btn
+                      = cp.hidden_field :_destroy, :class => 'row_delete_member'
+                  tfoot
+                    tr.d-flex
+                      td.col-0
+                      td.col-4
+                      td.col-1
+                      td.col-1
+                      td.col-1
+                      td.col-1
+                      td.col-3
+                      td.col-0.text-nowrap.add-btn
+                        = button_tag "+", id: 'add_row', class: 'btn btn-outline-primary btn-xs add-button', method: :get 
+                        = button_tag "коп", id: 'clone_row', class: "btn btn-outline-primary btn-xs add-button", method: :get
 
     .row.my-3
       .col-xs-12.col-md-12
@@ -33,7 +84,7 @@
                     tr.d-flex
                       th.col-0 №
                       th.col-3#add_position Участник
-                      th.col-1 Ед. изм.
+                      /th.col-1 Ед. изм.
                       th.col-1 Ставка, р/час
                       th.col-1 Время, час
                       th.col-1 Коэфф-т
@@ -45,7 +96,7 @@
                       tr.d-flex.body-row
                         td.col-0.body-row-id = label_tag "calc_row_id[]", '1', class: 'label-xs mb-0'
                         td.col-3 = cp.select :position_salary_id, @position_salaries, { include_blank: '...', selected: cp.object.position_salary_id }, class: 'form-control form-control-xs row-position-select', required: true
-                        td.text-muted.col-1 чел/час
+                        /td.text-muted.col-1 чел/час
                         td.col-1 = cp.label :salary, '0.0', class: 'label-xs text-muted mb-0 row-salary'
                         td.col-1 = cp.text_field :working_time, class: 'form-control form-control-xs row-working-time', required: true
                         td.col-1 = cp.text_field :time_coeff, class: 'form-control form-control-xs row-time-coeff', required: true
@@ -170,6 +221,7 @@
                       td.text-nowrap.add-btn
                         = button_tag "+", id: 'add_row', class: 'btn btn-outline-primary btn-xs add-button', method: :get 
                         = button_tag "коп", id: 'clone_row', class: "btn btn-outline-primary btn-xs add-button", method: :get
+
     .row.mt-3.mb-3
       .col-xs-12.col-md-12.text-right.label-xs
         | Прямые затраты, руб: 

@@ -1,9 +1,13 @@
-h3.text-center.mt-5 Список категорий ТМЦ
+h3.text-center.mt-5 Список ТМЦ
+
+.row.mb-2.pl-3
+  .col-xs-9.col-md-9
+    = link_to 'Новая категория ТМЦ', new_inventory_category_path, target: :_blank
 
 .row.mb-2.pl-3
   .col-xs-9.col-md-10
-    = link_to 'Новая категория ТМЦ', new_inventory_category_path
-  .col-xs-1.col-md-1.d-flex
+    = link_to 'Новая ТМЦ', new_inventory_path, target: :_blank
+  .col-xs-3.col-md-2.d-flex.justify-content-end
     = button_tag '#', class: 'btn btn-outline-primary btn-sm collapse-all' do
       i.fa.fa-compress.fa-rotate-45
     = button_tag '#', class: 'btn btn-outline-primary btn-sm expand-all' do
