@@ -59,7 +59,7 @@ class CalculationsController < ApplicationController
     respond_to do |format|
       if params[:commit] == 'Сохранить как'
         calc = Calculation.new(calculation_create_params)
-        if calc.save
+        if calc.save!
           if calc.update_attributes(category_params)
             flash[:success] = 'Калькуляция успешно создана.'
             format.html { redirect_to edit_calculation_path(calc) }

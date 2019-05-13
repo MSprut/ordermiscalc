@@ -47,7 +47,7 @@
                     = f.fields_for :related_calculations do |cp|
                       tr.d-flex.body-row
                         td.col-0.body-row-id = label_tag "calc_row_id[]", '1', class: 'label-xs mb-0'
-                        td.col-4 = cp.select :related_calculation_id, @related_calculations, { include_blank: '...', selected: cp.object.related_calculation_id }, class: 'form-control form-control-xs row-related-calculation-select', required: true
+                        td.col-4 = cp.select :related_calculation_id, @related_calculations, { include_blank: '...', selected: cp.object.related_calculation_id }, class: 'form-control form-control-xs row-related-calculation-select'
                         td = cp.label :unit, '', class: 'label-xs text-muted mb-0 row-unit'
                         td.col-1
                         td.col-1
